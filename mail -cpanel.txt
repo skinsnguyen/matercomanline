@@ -1,0 +1,192 @@
+see al logs  ->1
+--------------
+cat /var/log/exim_mainlog | grep cwd | grep /home
+
+
+exim -bpr | tail  -> from send mail id
+
+list forzen mail
+----------------
+exim -bpr | grep frozen | wc -l 
+
+
+  
+Find spammers:
+-----------------
+
+grep "cwd=" /var/log/exim_mainlog|awk '{for(i=1;i<=10;i++){print $i}}'|sort|uniq -c|grep cwd|sort -n
+
+Hotmail delist ->https://support.live.com/eform.aspx?productKey=edfsmsbl3&ct=eformts&scrx=1
+--------------- 
+Mail
+-----
+
+Exim server files location and logs
+------------------------------------
+
+-------------------------------------------------------------------
+ exiqgrep -i -f example.com | wc -l
+particular user queue
+
+exim -bpc
+counts all email in the mail queue
+
+exim -bp
+mailq — The mailq is relevant as it gives your the email IDs.
+
+exim -M emailID
+force delivery of one message
+
+exim -qf
+Force another queue run
+
+exim -qff
+Force another queue run and attempt to flush frozen messages
+
+exim -Mvl messageID
+View Log for message
+
+exim -Mvb messageID
+View Body for message
+
+exim -Mvh messageID
+View Header for message
+
+exim -Mrm messageID
+ReMove message (no errors sent)
+
+exim -Mg messageID
+Give up and fail message, message bounces to sender
+---------------------------------------------------------------------------------------------------
+
+With above commands you can which process is causing load on the server after that you can go with next steps.
+If you see many processes of exim then you can check exim in more detail. shows the total no of email in qmail
+
+    exim –bpc
+
+Print a listing of the messages in the queue
+
+    exim -bp
+
+Following command will show path to the script being utilized to send mail
+
+    ps -C exim -fH eww
+    ps -C exim -fH eww | grep home
+
+    cd /var/spool/exim/input/
+    egrep "X-PHP-Script" * -R
+
+Shows no of frozen emails
+
+    exim -bpr | grep frozen | wc -l
+
+To remove FROZEN mails from the server
+
+exim -bpru | grep frozen | awk '{print $3}' | xargs exim -Mrm
+
+
+    exim -bp | exiqgrep -i | xargs exim -Mrm
+    exiqgrep -z -i | xargs exim –Mrm
+
+Check for spamming if anybody is using php script for sending mail through home
+
+    tail -f /var/log/exim_mainlog | grep home
+
+If anyone is spamming from /tmp
+
+    tail -f /var/log/exim_mainlog | grep /tmp
+
+To display the IP and no of tries done bu the IP to send mail but rejected by the server.
+
+    tail -3000 /var/log/exim_mainlog |grep 'rejected RCPT' |awk '{print$4}'|awk -F\[ '{print $2}'|awk -F\] '{print $1} '|sort | uniq -c | sort -k 1 -nr | head -n 5
+
+Shows the  connections from a certain ip to the   SMTP server
+
+    netstat -plan|grep :25|awk {‘print $5′}|cut -d: -f 1|sort|uniq -c|sort -nk 1
+
+To shows the domain name and the no of emails sent   by that domain
+
+    exim -bp | exiqsumm | more
+
+If  spamming from outside domain then you can block that domain or email id on the server
+
+    vim /etc/antivirus.exim
+
+Add the following lines:
+
+    if $header_from: contains “name@domain.com”
+    then
+    seen finish
+    endif
+
+Catching spammer
+Check mail stats
+
+    exim -bp | exiqsumm | more
+
+Following command will show you the maximum no of email currently in the mail queue have from or to the email address in the mail queue with exact figure.
+
+    exim -bpr | grep “<*@*>” | awk '{print $4}'|grep -v “<>” | sort | uniq -c | sort -n
+
+That will show you the maximum no of email currently in the mail queue have for the domain or from the domain with number.
+
+    exim -bpr | grep “<*@*>” | awk '{print $4}'|grep -v “<>” |awk -F “@” '{ print $2}' | sort | uniq -c | sort -n
+
+Check if any php script is causing the mass mailing with
+
+    cd /var/spool/exim/input
+    egrep “X-PHP-Script” * -R
+
+Just cat the ID that you get and you will be able to check which script is here causing problem for you.
+To Remove particular email account email
+
+    exim -bpr |grep “domain.com”|awk {‘print $3′}|xargs exim -Mrm
+
+The number of mails sent by a domain :
+
+exigrep @domain.com /var/log/exim_mainlog|grep 2009-04-17|grep Completed|wc -l
+
+----------------------------------
+To find the emails going from the server:
+
+ps -C exim -fH ewww |grep home 
+
+
+It shows from which user’s home the mail is going, so that you can easily trace it and block it if needed.
+
+To find Top 50 domains usinf email server with options:
+
+
+
+
+
+
+=--------------------------------------------------------------------------------------------- 
+
+/etc/exim.conf – exim main configuration file
+
+/etc/localdomains – list of domains allowed to relay mail
+
+/etc/remotedomains – list of remote MX record domains.
+
+/var/log/exim_mainlog – incoming/outgoing mails are logged here
+
+/var/log/exim_rejectlog – exim rejected mails are reported here
+
+/var/log/exim_paniclog – exim errors are logged here
+
+/var/spool/exim/input – Mail queue
+
+/scripts/restartsrv_exim – Cpanel script to restart exim
+
+/etc/valiases/domainname.com – Email forwarders and catchall address file
+
+/etc/vfilters/domainname.com – Email filters file
+
+/home/username/etc/domainname/passwd – POP user authentication file
+
+/home/username/mail/inbox – catchall inbox
+
+/home/username/mail/domainname/popusername/inbox – POP user inbox
+
+/home/username/mail/domainname/popusername/spam – POP user spambox
