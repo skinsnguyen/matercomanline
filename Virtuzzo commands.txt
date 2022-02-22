@@ -1,0 +1,389 @@
+Virtuzzo commands
+=========================================================================
+How to create an container in Virtuozoo
+vzctl create 7733(container ID) –hostname sachin.testserver.com –ipadd 192.168.20.251
+=========================================================================
+How to enter a container
+vzctl enter Container ID
+=========================================================================
+How to start
+vzctl start Container ID
+=========================================================================
+Parallel agent configuration file
+/etc/sysconfig/vzagent
+=========================================================================
+To check ram of perticular container
+vzctl –help | grep ram
+vzctl exec Container ID free -m
+=========================================================================
+To increase or decrease the ram of container
+vzctl set Container ID –ram 128M –save
+=========================================================================
+Disk quota for container
+vzctl exec Container ID df -h
+=========================================================================
+To set /change the disk quota
+vzctl set Container ID -diskspace 400000 –save
+=========================================================================
+Parallels Virtuozzo Containers for Linux To check for available updates:
+# vzup2date -s -m batch list
+=========================================================================
+To install these updates
+# vzup2date -s -m batch install
+=========================================================================
+For the interactive wizard, run:
+# vzup2date
+=========================================================================
+Parallels Cloud Server To check for available updates:
+# yum check-update
+=========================================================================
+To install these updates:
+# yum update
+=========================================================================
+Container start, stop, migration, creation, deletion, and configuration changes are logged in the main vzctl.log:
+# cat /var/log/vzctl.log
+=========================================================================
+Package installation via vzpkg and template-related operations are logged in the vztt.log:
+# cat /var/log/vztt.log
+=========================================================================
+Parallels Virtuozzo Containers and template update operations are logged in the vzup2date.log:
+# cat /var/log/vzup2date.log
+=========================================================================
+XML API, SOAP API, backup, and other PVA Agent-related operations are logged in the vzagent.log:
+# cat var/log/pva/agent/YYYY.MM.DD-vzagent.log
+=========================================================================
+For more information about PVA logs and troubleshooting, refer to #6981.
+Parallels Virtuozzo Containers kernel messages and service messages are in the dmesg and messages logs:
+# cat /var/log/dmesg
+# cat /var/log/messages
+=========================================================================
+Which OSes are available for PVC and PCS installations?
+PCS is installed on Bare Metal and does not require any operating system. As regards PVC, you can see the list of supported systems in #112437.
+=========================================================================
+What is the difference between vzbackup and vzabackup?
+vzbackup and vzrestore use tar as a back-end for creating or restoring backups by default, and do not require PVA Agent to be running.
+vzabackup and vzarestore use Acronis as a back-end for backup creation and restoration, and are controlled via PVA Agent.
+=========================================================================
+How to create a backup for the container 123123:
+# vzabackup localhost -e 123123
+=========================================================================
+How to list a container’s backups:
+# vzarestore -l -f -e 123123
+=========================================================================
+How to restore container 123123:
+# vzarestore -e 123123
+=========================================================================
+How do I manage the PVA Agent service?
+To start, stop, or restart, use the pvaagent tool:
+# pvaagent restart
+=========================================================================
+To troubleshoot PVA Agent-related issues, check these logs:
+# cat /var/log/pva/agent/YYYY.MM.DD-vzagent.log
+=========================================================================
+How do I manage the Parallels Virtuozzo Containers service?
+To start, stop, or restart the service, use the vz script:
+# service vz restart
+Containers will be restarted during this procedure.
+=========================================================================
+How do I check the release version?
+To check the Virtuozzo release version:
+# rpm -q virtuozzo-release
+=========================================================================
+virtuozzo-release-4.7.0-202.x86_64
+To check the PVA release version:
+# rpm -q pva-release
+=========================================================================
+pva-release-6.0-2119.x86_64
+To check the PCS or Paralllels Server version:
+# rpm -q parallels-server-bm-release
+==========================================================================
+parallels-server-bm-release-6.0.0-1077.x86_64 To check the kernel version:
+# uname -r
+2.6.32-042stab076.5
+=========================================================================
+How do I check whether the node is registered in PVA Management Node?
+Use the vzagroup tool:
+# vzagroup list
+A node is not registered in PVA Management Node if the output contains this line:
+host is a slave in vzgroup, which master node address is local
+If a node is a member of the PVA group, the output will show the IP address of the PVA Management Node it is registered in:
+host is a slave in vzgroup, which master node address is ${PVA_MN_IP_ADDRESS}
+=========================================================================
+
+Basic Open VZ commands
+==========================================================================
+
+1. To get the list of all the VPS’s hosted on the Node.
+root@opevz~]#vzlist -a
+==========================================================================
+2. To start the VPS
+root@opevz ~]#vzctl start VPS_ID
+==========================================================================
+3.To stop (Shut Down) the VPS
+root@opevz ~]#vzctl stop VPS_ID
+==========================================================================
+4. To view the status of the particular VPS
+root@opevz ~]#vzctl status VPS_ID
+==========================================================================
+5. To stop the VPS quickly and forcefully
+root@opevz ~]#vzctl stop VPS_ID –fast
+==========================================================================
+6. To enter in a particular VPS
+root@opevz ~]# vzctl enter VPS_ID
+==========================================================================
+Following are few VPS configuration Commands
+
+7. To set the Hostname of a VPS.
+root@server ~]#vzctl set VPS_ID –hostname server.domain.com –save
+==========================================================================
+8. To add a new IP to the hosting VPS.
+root@opevz ~]#vzctl set VPS_ID –ipadd 1.2.3.4 –save
+==========================================================================
+9. To delete the IP from VPS.
+root@opevz ~]#vzctl set VPS_ID –ipdel 1.2.3.4 –save
+==========================================================================
+10 To reset root password of a VPS.
+root@opevz ~]#vzctl set VPS_ID –userpasswd root:new_password –save
+==========================================================================
+11. To add the nameserver IP’s to the VPS.
+root@server ~]#vzctl set VPS_ID –nameserver 1.2.3.4 –save
+==========================================================================
+12. To set memory limit for VPS
+root@server ~]#vzctl set VPS_ID –slmmemorylimit 2048M –save
+==========================================================================
+13. To set Disk quota for VPS
+root@sopevz ~]#vzctl set VPS_ID –diskspace 62914560 –save
+==========================================================================
+14. To enable offline_management
+root@opevz ~]#vzctl set VPS_ID –offline_management yes –save
+==========================================================================
+15. To set boot status
+root@opevz ~]#vzctl set VPS_ID –onboot no –save
+==========================================================================
+
+ 
+
+Virtuozzo Containers Command Line Utilities
+ 
+
+===========================================================================
+
+ 
+
+The table below contains the full list of Parallels Virtuozzo Containers command-line utilities.
+
+General utilities are intended for performing day-to-day maintenance tasks:
+
+vzctl
+
+Utility to control Containers.
+
+vzlist
+
+Utility to view a list of Containers existing on the Node with additional information.
+
+vzquota
+
+Utility to control Parallels Virtuozzo Containers disk quotas.
+
+Licensing utilities allow you to install a new license, view the license state, generate a license request for a new license:
+
+vzlicview
+
+Utility to display the Parallels Virtuozzo Containers license status and parameters.
+
+vzlicload
+
+Utility to manage Parallels Virtuozzo Containers licenses on the Node.
+
+vzlicupdate
+
+Utility to activate the Parallels Virtuozzo Containers installation, update the Parallels Virtuozzo Containers licenses installed on the Node, or transfer the Parallels Virtuozzo Containers license from the Source Node to the Destination Node.
+
+Container migration tools allow to migrate Containers between Nodes or within one Node:
+
+vzmigrate
+
+Utility for migrating Containers from one Node to another.
+
+vzmlocal
+
+Utility for the local cloning or moving of the Containers.
+
+vzp2v
+
+Utility to migrate a physical server to a Container on the Node.
+
+Container backup utilities allow to back up and restore the Container private areas, configuration files, action scripts, and quota information:
+
+vzbackup
+
+Utility to back up Containers.
+
+vzrestore
+
+Utility to restore backed up Containers.
+
+vzabackup
+
+Utility to back up Nodes and their Containers. As distinct fromvzbackup, this utility requires the Parallels Agent software for its functioning.
+
+vzarestore
+
+Utility to restore backed up Nodes and Containers. As distinct fromvzrestore, this utility requires the Parallels Agent software for its functioning.
+
+Template management tools allow the template creation, maintenance and installation of applications into a Container:
+
+vzpkg
+
+Utility to manage OS and application EZ templates either inside your Containers or on the Hardware Node itself.
+
+vzmktmpl
+
+Utility to create OS and application EZ templates.
+
+vzveconvert
+
+Utility to convert Containers based on standard templates to EZ template-based Containers.
+
+vzpkgproxy
+
+Utility to create caching proxy servers for handling OS and application EZ templates.
+
+vzrhnproxy
+
+Utility to create RHN proxy servers for handling the packages included in the RHEL 4 and RHEL 5 OS EZ templates.
+
+vzpkgls
+
+Utility to get a list of templates available on the Hardware Node and in Containers.
+
+vzpkginfo
+
+Utility to get the information on any template installed on the Hardware Node.
+
+vzpkgcreat
+
+Create a new package set from binary RPM or DEB files.
+
+vzpkgadd
+
+Utility to add a new template to a Container.
+
+vzpkglink
+
+Utility to replace real files inside a Container with symlinks to these very files on the Node.
+
+vzpkgrm
+
+Utility to remove a template from a Container.
+
+vzpkgcache
+
+Update a set of preinstalled Container archives after new template installation.
+
+Supplementary tools perform a number of miscellaneous tasks in the Hardware Node and Container context:
+
+vzup2date
+
+Utility to update your Parallels Virtuozzo Containers software and templates.
+
+vzup2date-mirror
+
+Utility to create local mirrors of the Parallels Virtuozzo Containers official repository.
+
+vzfsutil
+
+Utility for the VZFS optimization and consistency checking.
+
+vzcache
+
+Utility to gain extra disk space by caching the files identical in different Containers.
+
+vzsveinstall
+
+Utility to create the Service Container on the Hardware Node.
+
+vzsveupgrade
+
+Utility to update the packages inside the Service Container.
+
+vzps and vztop
+
+Utilities working as the standard ps and top utilities, with Container-related functionality added.
+
+vzsetxinetd
+
+Utility to switch some services between a standalone and xinetd-dependent modes.
+
+vzdqcheck
+
+Print file space current usage from quota’s point of view.
+
+vzdqdump andvzdqload
+
+Utilities to dump the Container user/group quota limits and grace times from the kernel or the quota file or for loading them to a quota file.
+
+vznetstat
+
+Utility that prints network traffic usage statistic by Containers.
+
+vzcpucheck
+
+Utility for checking CPU utilization by Containers.
+
+vzmemcheck
+
+Utility for checking the Hardware Node and Container current memory parameters.
+
+vzcalc
+
+Utility to calculate resource usage by a Container.
+
+vzcheckovr
+
+Utility to check the current system overcommitment and safety of the total resource control settings.
+
+vzstat
+
+Utility to monitor the Hardware Node and Container resources consumption in real time.
+
+vzpid
+
+Utility that prints Container id the process belongs to.
+
+vzsplit
+
+Utility to generate Container configuration file sample, “splitting” the Hardware Node into equal parts.
+
+vzcfgscale
+
+Utility to scale the Container configuration.
+
+vzcfgvalidate
+
+Utility to validate Container configuration file correctness.
+
+vzstatrep
+
+Utility to analyze the logs collected by vzlmond and to generate statistics reports on the basis of these logs (in the text and graphical form).
+
+vzreport
+
+Utility to draw up a problem report and to automatically send it to the Parallels support team.
+
+vzhwcalc
+
+Utility to scan the main resources on any Linux server and create a file where this information will be specified.
+
+vzveconvert
+
+Utility to convert the Containers based on Parallels standard OS templates to the EZ template-based ones.
+
+vznetcfg
+
+Utility to manage network devices on the Hardware Node.
+
+vzmtemplate
+
+Utility to migrate the installed OS and application templates from the one Hardware Node to another.
