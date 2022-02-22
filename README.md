@@ -1,4 +1,3 @@
-# matercomanline
 prestashop - 500 error
 ===================
 https://www.prestashop.com/forums/topic/421126-request-exceeded-the-limit-of-10-internal-redirects-due-to-probable-configuration-error/
