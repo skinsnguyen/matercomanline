@@ -1,0 +1,3263 @@
+SWAP Creation 4GB
+==================
+  927  dd if=/dev/zero of=/usr/swap-file bs=4096 count=8192000
+  928  cd /usr/
+  929  ls
+  930  du -sch swap-file
+  931  rm -f swap-file
+  932  ls
+  933  bc
+  934  dd if=/dev/zero of=/swapfile1 bs=1024 count=4194304
+  935  mkswap /swapfile1
+  936  vi /etc/fstab
+  937  mount -a
+  938  df -h
+  939  swapon -s
+  940  swapon /swapfile1
+  941  swapon -s
+
+
+
+mysql path in directadminserver
+===============================
+ cat /usr/local/directadmin/conf/mysql.conf
+
+
+Cphulkd
+========
+/usr/local/cpanel/etc/init/stopcphulkd
+/usr/local/cpanel/bin/cphulk_pam_ctl --disable
+
+
+fsck
+=====
+ fsck -fcy /dev/sdc1
+
+=====================
+
+smartctl
+===========
+/usr/sbin/smartctl -q errorsonly -H -l selftest -l error /dev/sdb
+
+/usr/local/cpanel/etc/init/startcpsrvd
+
+exim -bpru | awk '{print $3}' | xargs exim -Mrm
+
+
+rsync --progress -azxvl --rsh='ssh -p<port>' /home/ root@<serverIp>:/home/
+
+/usr/local/cpanel/scripts/mysqlconnectioncheck
+
+lsof -i tcp:80
+
+dig NS theinneryard.co.uk +short
+
+http://hiox.org/33110-cleaning-large.php   - eximstats mysql cleaning.
+
+http://explainshell.com
+
+https://www.buycpanel.com/addons/litespeed
+
+http://blog.shadypixel.com/monitoring-hard-drive-health-on-linux-with-smartmontools/
+
+
+Linux server load issues & Monitoring simple steps
+Catch / Find Spammer from your cPanel Linux Servers
+
+ To check server load and which users are logged on the server with IP address you can fire this command
+
+    w
+
+To check for the server load and watch for process
+
+    top
+    top â€“d2
+    top â€“c d2
+
+Memory status
+
+    free â€“m
+
+To see all processes running on the server
+
+    ps â€“aufx
+
+
+----------------------------------
+To find the emails going from the server:
+
+ps -C exim -fH ewww |grep home
+
+If Mysql causing the load so you can use following commands to check it.
+
+    mysqladmin pr
+    mysqladmin -u root processlist
+    mysqladmin version
+    watch mysqladmin proc
+
+If Apache causing the load so check using following commands.
+    netstat -ntu | grep SYN_RECV | awk {'print $6'} | cut -d : -f1 | sort | uniq -c | sort -n
+    netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+    netstat -an |grep :80 |wc -l
+    netstat -n | grep :80 | wc -l;uptime ; netstat -n | wc -l
+    netstat -tupl
+    pidof httpd
+    history | netstat
+    lsof -p pid
+
+If mysql is causing load so you can check it using following commands.
+
+
+    mysqladmin -u root processlist
+    mysqladmin version
+    watch mysqladmin proc
+    mysqladmin -u root processlist
+
+
+Other Useful Commands
+
+
+To check ipd of php
+
+    pidof php
+    lsof  -p pid
+    netstat -an |grep :80 |wc â€“l
+    netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+    netstat -na |grep :80 |sort
+
+Use below mentioned command to get top memory consuming processes
+
+    ps aux | head -1;ps aux â€“no-headers| sort -rn +3 | head
+
+Use below command to get top cpu consuming processes
+
+    ps aux | head -1;ps aux â€“no-headers | sort -rn +2 |more
+
+You can check if any backup is going on, run the following commands
+
+    ps aux | grep pkg
+    ps aux | grep gzip
+    ps aux | grep backup
+
+We can trace the user responsible for high web server resource usage by the folowing command
+
+    cat /etc/httpd/logs/access_log | grep mp3
+    cat  /etc/httpd/logs/access_log | grep rar
+    cat  /etc/httpd/logs/access_log | grep wav etc
+    cat /etc/httpd/logs/access_log | grep 408 can be used to check for DDOS attacks on the server.
+
+    cat  /etc/httpd/logs/access_log | grep rar
+
+
+
+http://lan.assistanz.com/clients/index.php?topic=3012.0
+
+after changing httpd.conf we have to do the below :
+
+rsync -vrplogDtH /home/hanfong/public_html/backup/homedir/mail/hanfong/dave /home/hanfong/mail/hanfong.com
+
+/usr/local/cpanel/bin/apache_conf_distiller --update
+
+=================================
+
+To see if your changes will be conserved, regenerate the Apache configuration file by running:        
+
+       /usr/local/cpanel/bin/build_apache_conf 
+
+=============================
+
+Linux performance monitoring tools
+
+top         Process activity
+vmstat         System activity, Hardware and system information
+uptime,w     Average system load
+ps, pstree     Displays the processes
+free         Memory usage
+iostat         Average CPU load, disk activity
+sar         Collect and report system activity
+mpstat         Multiprocessor usage
+numastat     NUMA-related statistics
+pmap         Process memory usage
+netstat     Network statistics
+iptraf         Real-time network statistics
+tcpdump,     ethereal Detailed network traffic analysis
+nmon         Collect and report system activity
+strace         System calls
+Proc         file system Various kernel statistics
+KDE         system guard Real-time systems reporting and graphing
+Gnome         System Monitor Real-time systems reporting and graphing
+
+lmbench         Microbenchmark for operating system functions
+iozone         file system benchmark
+netperf     Network performance benchmark
+
+http://jayanvenugopalan.blogspot.in/
+
+chattr +i /etc/mailips
+
+for user in `ls -A /var/cpanel/users` ; do
+
+       /usr/local/cpanel/bin/dkim_keys_install $user  &&
+
+         /usr/local/cpanel/bin/spf_installer $user ; done
+
+
+
+============================
+
+===============
+in backup drive
+mysql eximstats < eximstats.sql
+
+lsof -p 180757 | more
+
+To find Memory usage:
+===============
+
+cd /usr/local/apache/logs
+
+grep "2013-11-04" suexec_log | awk '{print $8}' | cut -d/ -f3 | sort | uniq -c | sort -n
+
+grep "emobilez" /var/log/dcpumon/2013/Dec/* | awk -F= '$5>15{print $5$6 }' | sort
+
+netstat -nat | awk '{print $6}' | sort | uniq -c | sort -n
+
+netstat -nat |grep 192.176.59.85 | awk '{print $6}' | sort | uniq -c | sort -n
+
+netstat -nat | awk '{ print $5}' | cut -d: -f1 | sed -e '/^$/d' | uniq | wc -l
+
+netstat -nat | awk '{ print $5}' | cut -d: -f1 | sed -e '/^$/d' | uniq | wc -l
+
+netstat -atun | awk '{print $5}' | cut -d: -f1 | sed -e '/^$/d' |sort | uniq -c | sort -n
+       
+
+
+ Checking for DDOS
+
+netstat -anp |grep 'tcp\|udp' | grep '192.176.59.85'| awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+
+netstat -n | grep :80 |wc -l
+
+netstat -n | grep :80 | grep SYN |wc -l
+
+DDOS for apache
+
+service httpd fullstatus | awk '{print $11}' | sort | uniq -c | sort -n
+
+tail -f /usr/local/apache/logs/access_log | awk '{print $1}'
+
+Attacking Script Log in Messages
+
+grep ALERT /var/log/messages -w | awk '{print $(NF-2)}'
+
+DDOS Attack in csf
+
+grep Firewall /var/log/messages -w | grep "SRC=" | awk '{print $12}' | cut -d= -f2 | sort | uniq -c | sort -n
+
+psres=$(ps -eo rss,vsz,user,pid,tty,time,cmd); set -- $(/bin/echo "$psres" | head -n1); shift; shift; echo "SWAP $*"; echo "$psres" | awk 'BEGIN {ORS=""; getline} {print $2 - $1 " "; for (i=3; i<NF; i++) print $i " "; print $NF "\n"}' | sort -rn | head
+
+
+grep -H Swap /proc/$i/smaps | awk '( $2 != "0" ) { print }'
+
+
+grep -H Swap /proc/*/smaps | awk '( $2 != "0" ) { print }' | sort | unique | sord -n
+------------------------------
+
+Checking for number of sessions files
+
+ll |grep 'sess*' | awk '{print $3}' | sort | uniq -c | sort -n
+
+grep 115.252.89.250 maillog | grep "Oct 30" | grep "user" | awk '{print $8 $10}' | cut -d= -f2 | sort | uniq -c | sort -n
+
+ps aux | awk '{print $1}' | sort | uniq -c | sort -n
+
+======================
+
+grep Firewall /var/log/messages -w | grep "SRC=" | awk '{print $12}' | cut -d= -f2 | sort | uniq -c | sort -n
+
+grep ALERT /var/log/messages -w | awk '{print $(NF-2)}'
+
+tail -f /usr/local/apache/logs/access_log | awk '{print $1}'
+
+service httpd fullstatus | awk '{print $11}' | sort | uniq -c | sort -n
+
+cd /usr/local/apache/logs
+grep 05/Nov/2013 access_log | awk '{print $1}'
+
+cd /usr/local/src/asm/arrow/patrol/demo
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" | grep "Sep 25"  | grep "timthumb"
+
+
+grep crit error_log -w | grep Sep 21 | awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+grep "CRITICAL" error_log -w | grep "May" | awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+
+grep "CRITICAL" error_log -w | grep "Jul 05"| awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+
+cd /usr/local/apache/conf/modsec
+sh modsec.sh
+
+grep "CRITICAL" error_log -w | grep "Jun 13"| awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+
+grep "Jun 08" suphp_log | awk '{print $8}' | cut -d/ -f3 | sort | uniq -c | sort -n
+
+cd /var/log
+grep Suspicious lfd.log -w | awk '{print $9 " " $14}'
+
+
+5.116.61.2
+
+grep 05/Sep/2012 /usr/local/apache/logs/access_log | awk '{print $1}' | sort | uniq -c | sort -n
+
+
+grep ModSecurity error_log | grep "Jun 30" | grep "50_asl_rootkits.conf" | awk -F'[' '{print $(NF-2)}' | cut -d] -f1 | awk '{sub(/\"/,"")};1' | awk '{sub(/\"/,"")};1' | awk '{print $2}' | awk '{ gsu(/www./, "")}; 1' | sort | uniq
+
+cd /usr/local/apache/logs
+
+grep ModSecurity error_log | grep "Jul 26" | grep "50_asl_rootkits.conf" | awk -F'[' '{print $(NF-2)}' | cut -d] -f1 | awk '{sub(/\"/,"")};1' | awk '{sub(/\"/,"")};1' | awk '{print $2}' | awk '{ gsub(/www./, "")}; 1' | sort | uniq
+grep ModSecurity error_log | grep "Jun 26" | grep "10_asl_rules.conf" | awk -F'[' '{print $(NF-2)}' | cut -d] -f1 | awk '{sub(/\"/,"")};1' | awk '{sub(/\"/,"")};1' | awk '{print $2}' | awk '{ gsub(/www./, "")}; 1' | sort | uniq
+--------------------------
+Line number:
+========
+
+awk 'NR==5 {print;exit}'
+
+awk '{print NR "\t" $0}' files*
+
+last -f wtmp.1 | more
+
+==================================================================================
+
+rsync -vrplogDtH /backup/ccclindi/mail/ccclindia.com/ccclkc639/cur /home/ccclindi/mail/ccclindia.com/ccclkc639/
+rsync -vrplogDtH /backup/ccclindi/mail/ccclindia.com/ccclkc639/new /home/ccclindi/mail/ccclindia.com/ccclkc639/
+rsync -vrplogDtH /backup/ccclindi/mail/ccclindia.com/ccclkc639/.Sent/cur /home/ccclindi/mail/ccclindia.com/ccclkc639/.Sent/
+rsync -vrplogDtH /backup/ccclindi/mail/ccclindia.com/ccclkc639/.Sent/new /home/ccclindi/mail/ccclindia.com/ccclkc639/.Sent/
+
+=========================
+ssh -p 9134 root@69.65.42.227
+
+
+/usr/sbin/cagefsctl --disable-cagefs
+
+lvectl apply all
+
+Check this also :
+
+find /home/bcetldh/public_html -type l -ls
+
+cat /var/log/fullfilepermission.log | grep lrwxrwxrwx -w | awk '{for (i=11; i<=NF; i++) printf($i)" ";print ""}' | egrep "`cat /usr/local/src/asm/arrow/patrol/permissionscan/exceptionslink`" -w -v
+
+CCCL:
+
+/scripts/upcp
+/scripts/fixcommonproblems
+
+===================================
+
+To unlink :
+
+cd /usr/local/src/asm/arrow/patrol/cleanhack
+sh unlink.sh
+cpanel username please:username
+=================================================================================
+not in dedicated server:
+
+cd /usr/local/src/asm/arrow/patrol/demo
+cat fullfilepermission.log | grep lrwxrwxrwx -w
+
+cd /usr/local/src/asm/arrow/patrol/demo
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" | grep "Jul 05"  | grep "timthump"
+
+
+=============================================================================
+monsterlinuxservers.com
+
+cd /backup/djeu38dj
+rmysqldump djeu38dj_hitcount > `date +%b"_"%d`_djeu38dj_hitcount.sql
+
+if you try:
+rm *
+
+and you get this:
+/bin/rm: Argument list too long
+
+do this instead:
+find . -name "*" -print | xargs rm
+
+-------------------------------------------------
+
+tail -f /var/log/lfd.log | grep Suspicious
+
+cd /usr/local/src/asm/arrow/patrol/demo
+
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" -w | grep "Jun 21" | grep "timthumb"
+
+
+grep User@Host /var/log/mysqld.slow.log | awk '{print $3}' | sort | uniq -c | sort -n
+
+
+SH: /usr/local/cpanel/cpkeyclt
+
+uptrack-upgrade -y
+
+grep smartd /var/log/messages
+
+
+cd /var/log
+
+tail -f /var/log/lfd.log | grep Suspicious
+
+cd /usr/local/maldetect/sess
+cd /usr/local/apache/logs
+
+grep "templates/beez" error_log
+
+grep "shell" error_log
+
+grep "r57" error_log
+
+grep denied error_log | grep "May 31" | grep CRITICAL | awk '{print $8}'| cut -d] -f1 | sort | uniq -c | sort -n
+netstat -plan | grep ":80" | sort | more
+
+clamscan -ir
+cat /usr/local/apache/logs/suexec_log | grep "2012-05-31" | egrep "`cat /usr/local/src/asm/arrow/patrol/suexeclogscan/suexecexceptions`" -w -v
+
+netstat -anp |grep 'tcp\|udp' | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+grep Suspicious lfd.log -w | awk '{print $9 " " $14}' | more
+then basic cmds
+
+named issue:
+-----------
+
+cd /scripts
+./fixndc
+
+/scripts/fixndc
+
+
+Security:
+-----------
+
+cd /var/log
+
+1.Suspicious:
+-----------
+
+whole log
+
+grep "Aug 10" lfd.log | grep "Suspicious Process"
+
+count,user,process
+
+grep "Aug 12" lfd.log | grep "Suspicious Process" | awk '{print $9,$10,$14}' | sort | uniq -c | sort -n
+
+
+2.mod security:
+----------------
+
+whole log
+
+grep "Jul  9" lfd.log | grep "mod_security"
+
+count,modsecurity,ip
+
+grep "Jul  9" lfd.log | grep "mod_security" | awk '{print $6,$10}' | sort | uniq -c | sort -n
+
+
+3.SSH login:
+-------------
+
+whole log
+
+grep "Jul  9" lfd.log | grep "SSH login"
+
+count,time,SSH login,ip
+
+grep "Jul  9" lfd.log | grep "SSH login" | awk '{print $3,$6,$7,$9}' | sort | uniq -c | sort -n
+
+
+4.WHM/cpanel root access:
+--------------------------
+
+
+whole log
+
+grep "Jul  9" lfd.log | grep "WHM/cPanel root access"
+
+count,time,ip
+
+grep "Jul  9" lfd.log | grep "WHM/cPanel root access" | awk '{print $3,$6,$10}' | sort | uniq -c | sort -n
+
+
+5.Failed POP3 login:
+--------------------
+
+whole log
+
+grep " 203.122.28.86" lfd.log | grep " Failed POP3 login"
+
+count,ip
+
+grep "Jul  13" lfd.log | grep " Failed POP3 login" | awk '{print $10}' | sort | uniq -c | sort -n
+
+
+6.Failed IMAP login:
+-----------------------
+
+grep "Jul 29" lfd.log | grep "Failed IMAP login"
+
+count,ip
+
+grep "Jul  13" lfd.log | grep "Failed IMAP login" | awk '{print $10}' | sort | uniq -c | sort -n
+
+
+7.Port Scan:
+-------------
+
+grep "Jul  13" lfd.log | grep "Port Scan"
+
+count,ip
+
+grep "Jul  13" lfd.log | grep "Port Scan" | awk '{print $10}' | sort | uniq -c | sort -n
+
+
+8.Exceeded LOCALRELAY limit:
+--------------------------------
+
+grep "Aug 18" lfd.log | grep "Exceeded LOCALRELAY limit"
+
+
+9.PERMBLOCK:
+--------------
+
+grep "Jul  13" lfd.log | grep "PERMBLOCK"
+
+count,ip
+
+grep "Jul  13" lfd.log | grep "PERMBLOCK" | awk '{print $7}' | sort | uniq -c | sort -n
+
+
+10.Incoming IP:
+------------------
+
+grep "Aug 11" lfd.log | grep "Incoming IP"
+
+Time,ip:
+
+grep "Aug 18" lfd.log | grep "Incoming IP" | awk '{print $3, $8}' | sort | uniq -c | sort -n
+
+
+11.Failed SMTP AUTH login:
+----------------------------
+
+grep "Aug 11" lfd.log | grep " Failed SMTP AUTH login" | grep 116.74.94.150
+
+
+
+Load:
+-------
+
+1.User Processing:
+--------------------
+
+
+whole logs:
+
+grep "Aug 18" lfd.log | grep "User Processing"
+
+path:
+
+grep "Jul 14" lfd.log | grep "User Processing" | awk '{print $14}' | sort | uniq -c | sort -n
+
+username:
+
+grep "Jul 13" lfd.log | grep "User Processing" | awk '{print $10}' | sort | uniq -c | sort -n
+
+time:
+
+grep "Jul 13" lfd.log | grep "User Processing" | awk '{print $3}' | sort | uniq -c | sort -n
+
+time,username,path:
+
+grep "Sep 04" lfd.log | grep "User Processing" | awk '{print $3, $10, $14}' | sort | uniq -c | sort -n
+
+
+2.LOAD:
+
+Time,load,threshold:
+---------------------
+
+grep "Sep  04" lfd.log | grep "LOAD" | awk '{print $3, $12, $15}' | sort | uniq -c | sort -n
+
+
+3.Excessive Processes:
+-----------------------
+
+Time,user name,count
+
+grep "Sep  04" lfd.log | grep "Excessive Processes" | awk '{print $3, $8, $11}' | sort | uniq -c | sort -n
+
+
+To find Memory usage:
+=====================
+
+cd /usr/local/apache/logs
+
+grep "harekpal" suphp_log | awk '{print $8}' | cut -d/ -f3 | sort | uniq -c | sort -n
+
+
+grep "pdfaorg" suphp_log | awk '{print $8}' | sort | uniq -c | sort -n
+
+
+ll |grep 'sess*' | awk '{print $3}' | sort | uniq -c | sort -n
+
+monsterlinuxservers.com:
+
+cd /backup/djeu38dj
+mysqldump djeu38dj_hitcount > `date +%b"_"%d`_djeu38dj_hitcount.sql
+
+
+uname -a
+yum list kernel
+uptrack-upgrade -y
+/usr/local/cpanel/cpkeyclt
+grep smartd /var/log/messages
+
+cd /var/log
+squid check
+grep Suspicious lfd.log -w | awk '{print $9 " " $14}' | more
+grep "Suspicious Process" lfd.log
+tail -f /var/log/lfd.log | grep Suspicious
+cat /var/log/fullfilepermission.log | grep lrwxrwxrwx -w | awk '{for (i=11; i<=NF; i++) printf($i)" ";print ""}'
+cat /var/log/fullfilepermission.log | grep rwxrwxrwx -w
+cat /var/log/fullfilepermission.log | grep rwxrwxrwx -w
+
+
+
+cd /usr/local/apache/logs
+cat /usr/local/apache/logs/suexec_log | grep "2012-06-30" | egrep "`cat /usr/local/src/asm/arrow/patrol/suexeclogscan/suexecexceptions`" -w -v
+grep "r57" error_log
+grep "shell" error_log
+grep madspotshell.php error_log
+grep "templates/beez" error_log
+grep "templates/ja_purity" error_log
+grep secars error_log | awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+grep crit error_log -w | grep Apr | awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+grep "CRITICAL" error_log -w | grep "May" | awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+
+
+cd /usr/local/src/asm/arrow/patrol/demo
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" | more
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" -w | grep "Jun 23" | grep akismet.php | more
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" -w | grep "Jun 23" | grep timthumb.php | more
+
+
+cd /usr/local/maldetect/sess
+ls -lsa
+
+cd /usr/local/apache/conf/modsec
+sh modsec.sh
+
+
+grep User@Host /var/log/mysqld.slow.log | awk '{print $3}' | sort | uniq -c | sort -n
+netstat -anp |grep 'tcp\|udp' | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+
+
+
+f.do pages not working:
+=================
+cd /usr/local/apache/conf/userdata/std/2/username/domainname
+vi cp_jkmount.conf
+paste JkMount /*.do ajp13 in the corresponding line .
+service httpd restart
+
+MAILS:
+======
+cat /etc/resolv.conf.bak
+/usr/sbin/exim -bt accounts@acplindia.org
+/etc/resolv.conf
+cat /etc/resolv.conf
+8.8.8.8
+8.8.4.4
+
+XMAIL-TRAC:
+==============
+
+cd /etc
+vi cpanel_exim_system_filter
+
+CPANEL BACKUP:
+=================
+How to restore the Cpanel backup
+
+Go to the path where he place the backup
+Rename the backup as username.tar.gz (use mv backup-username.tar.gz username.tar.gz)
+copy the username.tar.gz to /home (cp username.tar.gz /home)
+/scripts/restorepkg username
+
+Login to WHM>>change ownership of multiple accoount
+
+
+Copy from another server:
+mkdir newbackup
+cp username.tar.gz /newbackup
+
+TO FIND MAIL LOG:
+==================
+cd /var/log
+
+grep mail id *
+
+TO go public_html:
+=================
+
+/scripts/whoowns
+ex :
+go to tmp
+
+[/tmp]# /scripts/whoowns shirgaonkarstudio.in*
+
+cd /home/ladder
+
+To find each file space:
+=================
+check the log files space.
+
+cd /usr/local/apache/logs
+ls -lsa
+du -ch
+du -ch --max-depth=1
+
+cd /var/log
+ls -lsa
+du -ch
+du -ch --max-depth=1
+
+
+MAL DETECT:
+============
+maldet -a /home/xmailccc/public_html
+
+MASTER DOMAIN NAME CHANGE:
+==============================
+
+cd /var/cpanel/users
+cat username
+
+/scripts/whoowns newdomain
+vi newdomain
+
+start date
+
+history -d N
+
+Permissions:
+==========
+find /home/gratta0/public_html -type f -exec chmod 644 {} \;
+find /home/gratta0/public_html -type d -exec chmod 755 {} \;
+chmod 000 public_html (changing permission)
+
+Dinacolour:
+==========
+
+cd /home/rcforall/public_html/
+find /home/jvenggg/public_html -type l -ls
+chmod -R 000 *
+
+If malware detected:
+================
+1.Find whether there is a link file
+go to the path cd /home/rcforall/public_html/
+find /home/ajiwikao/public_html/ -type l -ls
+
+2.Change permission under the public_html for all files and folders ( chmod -R 000 *)
+and then change the public_html
+
+chmod 000 public_html
+
+UNTAR:
+=======
+tar xvfz homedir.tar (untar the backup so atht the folder will be sretaed in the name of besthum)
+
+cd /backup/
+cd cpbackup/
+cd weekly/
+cp besthum1.tar.gz /home/besthum1
+ls -lsa
+cd /home/besthum1
+ls -lsa
+mv besthum1.tar.gz public_html
+ls -lsa
+cd public_html
+ls -lsa
+tar xvfz besthum1.tar.gz
+ls -lsa
+cd besthum1
+ls -lsa
+tar xvf homedir.tar
+ls -lsa
+cd public_html
+cp -R -P /home/thealmam/public_html/* /home/usernmae/public_html
+
+Pear mail:
+=========
+
+which pear
+cd /usr/local/bin/
+
+pear install mail
+pear install Net_SMTP
+pear install mail_mime
+
+========
+
+pear install Text_Password
+pear install Image_Text
+pear install Text_CAPTCHA
+
+
+MOD SECURITY RULES:
+====================
+cd /usr/local/apache/conf
+ls -lsa
+cd modsec
+ls -lsa
+
+lsof -p 940819
+
+To suspend an account:
+
+/scripts/suspendacct sandeepp "FILE UPLOADED IN TEMP" 1
+
+TOMCAT RESTART:
+=================
+/scripts/restartsrv tomcat
+
+netstat -anp |grep 'tcp\|udp' | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+
+MEMORY USAGE:
+=================
+grep "Mar 1" suphp_log | awk '{print $8}' | cut -d/ -f3 | sort | uniq -c | sort -n
+
+.do page working:
+-----------------
+cd /usr/local/apache/conf/userdata/std/2/username/domainname
+vi cp_jkmount.conf
+paste JkMount /*.do ajp13 in the corresponding line .
+service httpd restart
+cd /usr/local/apache/logs
+
+======================================
+
+/usr/local/cpanel/bin/update-roundcube --force
+/usr/local/cpanel/bin/update-horde --force
+
+
+
+Sorry, that domain is already setup (remove it from httpd.conf)
+===============================================
+
+cd /usr/local/apache/conf
+cp httpd.conf httpdbackup(take a copy)
+vi httpd conf
+search for that domain
+remove it from virtual host to virtual host
+then save it
+cd /tmp
+/scripts/rebuildhttpdconf (to rebuild that cofiguration)
+
+chmod 1777 /tmp
+
+How to enable slow queries:
+=======================
+refer it also in
+
+http://dev.mysql.com/doc/refman/5.1/en/slow-query-log.html
+
+vi /etc/my.cnf
+Under
+
+Quote:
+[mysqld]
+
+Add the following directives:
+
+Quote:
+log-long-format
+log-slow-queries = /var/log/mysqld.slow.log
+
+Save and then run these commands:
+
+touch /var/log/mysqld.slow.log
+chown mysql.mysql /var/log/mysqld.*
+/scripts/restartsrv mysql
+
+mail:
+=====
+cd /var/spool/exim/db and delete files: retry , retry.lockfile , wait-remote_smtp, wait-remote_smtp.lockfile
+/etc/init.d/exim restart
+vi /etc/resolv.conf and check that name servers,A record ip is there
+/scripts/upcp
+netstat -nr
+service network restart
+CSF stop and restart
+
+
+
+find /home/$line/public_html/ -type d -exec chmod 555 {} \;
+chmod 755 /home/$line/public_html
+
+done
+
+for line in `cat exceptions444and555`
+do
+
+find /home/$line/public_html/ -type f -exec chmod 444 {} \;
+
+done
+
+sh file444.sh
+
+if it runs na
+
+then permissionscanner.sh la
+
+include
+
+
+How to take a fresh backup and place it to other users public_html:
+===================================================
+
+/scripts/pkgacct excelle1(username)- to take backup cpmove-bollywoo.tar.gz
+
+/home/cpmove_username.tar.gz - The taken backup is stored in this path (copy that)
+go to home cd /home
+mv cpmove_username.tar.gz username.tar.gz (rename as username.tar.gz)
+cp username.tar.gz /home/usernme(in which you need to place)/public_html - To place the backup in public_html of domain
+cp wwwiaat.tar.gz /home/iaatedu/public_html
+
+cp mahalax.tar.gz /backup1/cpbackup/weekly
+
+chown username.groupname file
+
+To take the domain logs and save it in seperate directory:
+===========================================
+mkdir as excelle1
+
+cp -R -p /usr/local/apache/domlogs/sdro/ /backup/sdro1
+
+cp -R -p /home/ajiwikao/public_html/ /backup1/maldetect
+
+
+tar /permission
+---------------
+
+find . -type f -exec chmod 644 {} \;
+find . -type d -exec chmod 755 {} \;
+
+
+CHANGE PERMISSION
+------------------------------
+
+find /home/fapcweb/public_html -type d -exec chmod 755 {} \;
+find /home/fapcweb/public_html -type f -exec chmod 644 {} \;
+
+To find logs in the zip file:
+--------------------------------------
+zcat *.gz | grep tljmasji
+
+named not working for a particular domain:
+--------------------------
+
+cd /var/named
+
+all the domains should be in root.named
+chown -R egsgroup.egsgroup
+
+chown root.named senthil.lkmfamily.com.db
+
+magento:
+------------
+
+"$mageFilename = 'app/Mage.php';"
+to
+
+"$mageFilename = '{path_to_magento}/app/Mage.php';"
+
+Domain is working but /magento is not working:
+
+normally the magento will be redirected to maintenance.flag
+
+If you want the index.php should work then rename the maintanence.flag
+
+
+Maldetect Installation:
+
+cd /usr/local/src/asm/
+mkdir softwares
+cd softwares
+wget http://www.cloudlinuxservers.com/maldetect-current.tar
+tar -xvf maldetect-current.tar
+cd maldetect-1.4.0
+sh install.sh
+
+
+RUBY INSTALLATION:
+***************************
+/scripts/installruby
+
+mysqlgem installation
+==================
+http://smangal.wordpress.com/2007/05/17/mysql-gem-on-centos/
+
+gem install mysql
+
+
+ruby -v
+rails -v
+if you installed Rails via gem :
+gem list
+to show the versions of all the components
+
+
+My Sql log:
+
+cat /var/log/mysqld.slow.log | sed -n '/scopesch/,/User@Host/p'
+
+grep /var/log/mysqld.slow.log | sed -n '/cepp/,/User@Host/p'
+
+grep User@Host /var/log/mysqld.slow.log | awk '{print $3}' | sort | uniq -c | sort -n
+
+
+MYSQL DUMP:
+
+mysql databasename < post.sql
+mysqldump aigoem_word > aigoem_word.sql
+mysql members_hispeed < members_hispeed.sql
+
+
+The domain is not suspended but the password is not modified:
+==============================================
+cd /var/cpanel/suspended
+remove the files
+
+Phising site:
+==========
+
+clamscan -ir /home/ncpj/
+
+clamscan -ir /home/temftpad34/public_html
+
+
+clamscan
+maldet
+password change
+suspend
+change the permission for public_html
+Go to the folder which is affected
+take the entire logs (Date,time modifed,contents)
+Check with sir and remove that folder
+Reply to the datacenter
+
+
+
+Server down na:
+==============
+1.netstat
+2.Pstree (cron)
+3.lfd log (check country )
+4.Daily process log
+
+Tomcat version:
+============
+/usr/local/jacarta/template
+
+cd /usr/local/jakarta/tomcat/conf
+cat server.xml
+
+
+Load:
+-------
+
+1.User Processing:
+--------------------
+
+
+whole logs:
+
+grep "Aug 17" lfd.log | grep "User Processing"
+
+path:
+
+grep "Aug 17" lfd.log | grep "User Processing" | awk '{print $14}' | sort | uniq -c | sort -n
+
+username:
+
+grep "Aug 10" lfd.log | grep "User Processing" | awk '{print $10}' | sort | uniq -c | sort -n
+
+time:
+
+grep "Aug 10" lfd.log | grep "User Processing" | awk '{print $3}' | sort | uniq -c | sort -n
+
+time,username,path:
+
+grep "Mar 1" lfd.log | grep "User Processing" | awk '{print $3, $10, $14}' | sort | uniq -c | sort -n
+
+
+2.LOAD:
+
+Time,load,threshold:
+---------------------
+
+grep "Aug 11" lfd.log | grep "LOAD" | awk '{print $3, $12, $15}' | sort | uniq -c | sort -n
+
+
+3.Excessive Processes:
+-----------------------
+
+Time,user name,count
+
+grep "Jun 06" lfd.log | grep "Excessive Processes" | awk '{print $3, $8, $11}' | sort | uniq -c | sort -n
+
+
+To find Memory usage:
+=====================
+
+cd /usr/local/apache/logs
+
+grep "Nov 05 05" suphp_log | awk '{print $8}' | cut -d/ -f3 | sort | uniq -c | sort -n
+
+
+cat /var/log/rkhunter.log | grep "Warning"
+
+
+ASM commands:
+
+cd /etc
+cat mail_reverse_dns
+
+Pradeepa akka shared commands:
+
+full permission check:
+
+cat /var/log/fullfilepermission.log | grep lrwxrwxrwx -w | awk '{for (i=11; i<=NF; i++) printf($i)" ";print ""}' | egrep "`cat /usr/local/src/asm/arrow/patrol/permissionscan/exceptionslink`" -w -v
+
+
+zcat lfd.log.1.gz | grep Suspicious -w | grep "Apr 7" | awk '{print $9 " " $14}' | grep "child" -w -v | grep "imap" -w -v | grep "pure-ftpd" -w -v | grep "pop3-login" -w -v | grep "spamd" -w -v | more
+
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" -w | grep "Apr 12" | more
+
+daily check :
+
+cd /usr/local/apache/logs
+grep "r57" error_log
+
+grep critical error_log -w | grep "Apr 14"| awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" -w | grep "Apr 12" | more
+======================================================================================================================
+
+cd /etc
+vi cpanel_exim_system filter
+remove the filter in the domain name
+save it
+restart exim
+
+cpanel update:
+===========
+/scripts/upcp
+
+Super reseller suite:
+===============
+1.Login to ybox admin>>Packages>>Add a package>>Create a package according to the specification.
+2.Check with Sir and check what are the servers we need to allocate to him.
+3..If that server is not added, server>>Add server>> (Remote key take from WHM)-WHM>>Setup Remote Access Key
+4.Super resellers>>Add a super reseller>>do all the things>>Submit
+5.old/New client (already we have set up one reseller account for him-- for him take the specifications (space,bandwidht,no of domains- Split it up from total package he took for the master reseller plan)
+6.Login to his ybox reseller account>>Packages>>Add a package>> Allocate the package with the same space,bandwidth,domains>>Create.>>Logout
+7.Go to admin YBox>>So click on Add dummy reseller >>Select his super reseller>>old Master domainname, user name,password, IP>>Choose the package which we have created in his ybox reseller account>>Add.
+
+
+Permission scanner
+=================
+1. cd /usr/local/src/asm/arrow/patrol/permissionscan go to this path
+2. go to permissionscanner.sh
+
+cat permissionscanner.sh - check which exeception file we have given in the coding
+3. vi exceptions -press I to edit
+4. Add the complete path which you want to whitelist
+5. Press Esc, Shift+z+z
+6. Finishd
+
+/home/smithfam/public_html/images/photos
+
+/home/smithfam/public_html/images/thumbnails
+
+/home/smithfam/public_html/images/horoscope
+To find the number:
+
+cat httpd.conf | awk '{printf("%5d : %s\n", NR,$0)}'
+
+
+1.Logs of maldetect
+2.Take the timings of each file uploaded.
+3.Check whether there is the linked file for every infected files
+4.Check Linked file for whole domain
+find /home/ashish -perm -777 -ls
+
+5.Check the fullpermissions logs whether our program have unlinked any files
+
+cd /var/log
+grep kmvindia fullfilepermission.log
+
+or
+
+cd /usr/local/src/asm/arrow/patrol/permissionscan
+grep username *
+or grep username fullfilepermission.log.Apr2123:10:14
+
+
+6. cd /usr/local/apache/domlogs/username
+grep filename *
+find the ip in which its get upload and how (Check it out throughly) and check in domainwhitepages.com and find which country (taiwan,turkey,south africa,sudan,us is very dangerous)
+
+7. csf -d ip
+
+8. cd /usr/local/apache/logs
+grep ip * and check whethe this ip is accessed only for this domain or various domains.
+copy the enitre things and put in notepad.
+
+9.cd /home/username
+chmod 000 public_html
+passwd username (enter the new password)
+/scripts/suspendacct username "Reasons" 1
+
+10.cd /usr/local/src/asm/arrow/patrol/demo
+cat modsecscanpatrol.log | grep "ROOTKITSANDASL" | grep "username" | more
+
+11.cd /var/log
+grep username * | more
+grep ip * | more
+
+12.cd /usr/local/apache/logs
+grep ip * | more
+
+13.check for the backup of that domain in the backup drive.
+
+14.check who is the reseller, master domain,mailid
+create the ticket on behalf of him and update the entire logs and tell him that the domain is hacked and it is going to be terminated with in 30 minutes
+
+
+15.Take the backup of that domain logs to the backup drive seperately
+cd /usr/local/apache/domlogs/username
+cp * /backup1(backup drive)
+
+16.Check with sir and terminate the domain
+
+
+
+cd /backup1
+mysqldump bansalie_bansal > bansalie_bansal.sql
+
+cp /usr/local/lib/php.ini /usr/local/lib/php.ini_back
+scp -pr -P 2382 root@198.15.72.251:/usr/local/lib/php.ini /usr/local/lib/php.ini
+scp -pr -P 2212 root@66.55.88.70:/home/learning /backup/oldbackup
+
+rvsitebuilder issue:
+===============
+cd /var/cpanel/rvglobalsoft/rvsitebuilder/var
+touch skip_validate_domain
+#602566 - Cannot connect to home.shriambeyjyotish.com using curl_init
+
+
+
+cd /backup1
+mysqldump manjeriw_manjeridb > manjeriw_manjeridb.sql
+
+scp -pr -P 8261 root@184.164.149.186:/home/wwwshaad.tar.gz /home/fourstec/public_html
+
+
+
+rvsitebuiler installation:
+====================
+
+RVSite Builder Installation :
+====================
+
+Go to shell
+
+cd /tmp
+
+and type the below commands one by one
+
+
+/scripts/makecpphp
+cd /usr/local/cpanel/whostmgr/docroot/cgi/
+wget http://download.rvglobalsoft.com/rvsitebuilderinstaller.tar
+tar -xvf rvsitebuilderinstaller.tar
+chmod 755 addon_rvsitebuilder.cgi
+rm -f rvsitebuilderinstaller.tar
+
+
+
+Login to the WHM>>RVsite builder installer
+
+agree the license>>step1>>step2
+
+Give the database username (any) , database password (any) , databasename(any) >> click on submit
+
+Then Home>>Plugins>>RVsite Builder
+
+system configuration>>Does your server compile PHP with mod SuPHP or enable SuExec? yes>>save
+
+Usercontrol list>>Enable RVSiteBuilder for all users:>>disable>>submit
+
+reseller cL>>Enable RVSiteBuilder for all resellers and their clients:>>disable>>submit
+
+Reseller transaction CL>>Enable RVSiteBuilder translation for all resellers:>>disable>>Submit
+
+SHELL :
+
+
+Auto Update:
+----------------
+
+Login into shell >> Go to
+
+cd /var/spool/cron
+vi root
+Add the below line,
+0 7 * * * /usr/local/cpanel/whostmgr/docroot/cgi/rvsitebuilderinstaller/autoinstaller.cgi > /dev/null
+
+press Esc >> Shift+Z+Z
+
+Auto Backup:
+------------
+Login into shell >> Go to
+cd /var/spool/cron
+vi root
+Add the below line,
+0 7 * * * perl /var/cpanel/rvglobalsoft/rvsitebuilder/rvsBackup.pl 'backup' > /dev/null
+
+press Esc >> Shift+Z+Z
+
+Login to WHM>>plugins>>RVsite builder manager
+
+Try out Usercontrol list: >> It should be disabled (check whether disabled or not)
+
+Thats all.
+
+=========================================================================
+No need X
+
+Then Login into shell >> Run the below command,
+
+perl /var/cpanel/rvglobalsoft/rvsitebuilder/panelmenus/cpanel/scripts/autofixphpini.pl
+
+
+
+
+
+====================================================================================
+
+
+To uninstall RVSite builder use the below commands,
+cd /usr/local/cpanel/whostmgr/docroot/cgi/
+rm -rf /usr/local/cpanel/whostmgr/docroot/cgi/rvsitebuilderinstaller/
+rm -f rvsitebuilderinstaller.tar
+
+TO Install rvsitebuilder
+/scripts/makecpphp
+cd /usr/local/cpanel/whostmgr/docroot/cgi/
+wget http://download.rvglobalsoft.com/rvsitebuilderinstaller.tar
+tar -xvf rvsitebuilderinstaller.tar
+chmod 755 addon_rvsitebuilder.cgi
+rm -f rvsitebuilderinstaller.tar
+
+3]Login into WHM >> Plugins >> RVsite builder Installation
+Increase the Cpanel process memory to 512 MB which is under tweak settings
+Plugins >> RVsite builder Installation >> click on agree ( which is the 2nd step) >> Installation process will continue
+Give the database username (any) , database password (any) , databasename(any)
+click on save
+
+error establioshing a database connection:
+==================================
+
+
+for zebronics correct :
+=================
+tar xvfz zebron55.tar.gz
+
+/backup/cpbackup/daily/zebron55
+come to the path
+tar -xvf homedir.tar ./mail/zebronics.com/guwahati.service
+
+
+tail -f modsecscanpatrol.log | grep "ROOTKITSANDASL"
+
+
+if the server is rebooted it won't get unmounted:
+
+Mount the backup permanently:
+
+mount /dev/sdb1 /backup
+vi /etc/fstab
+add the line
+/dev/sdb1 /backup ext3 defaults 1 1
+
+
+
+grep Suspicious -w lfd.log | grep "May 9" | awk '{print $9 " " $14}' | grep "child" -w -v | grep "imap" -w -v | grep "pure-ftpd" -w -v | grep "pop3-login" -w -v | grep "spamd" -w -v | more
+958 grep Suspicious lfd.log -w | grep "southe" | grep "May 9"
+
+
+yum install unrar unrar x file.rar
+
+csf -a 182.68.0.0/29
+
+
+To check the java logs:
+
+tail -100 /usr/local/jakarta/tomcat/logs/catalina.out
+
+
+TO run Backup Manually:
+--------------------------
+
+/scripts/cpbackup
+
+
+softaculous installation:
+-----------------------------------
+cd /usr/local/cpanel/whostmgr/docroot/cgi
+wget -N http://www.softaculous.com/ins/addon_softaculous.php
+chmod 755 addon_softaculous.php
+
+
+cron:
+
+cd /var/log
+cat cron grep cron path
+
+cd /var/spool
+check the cron path
+
+
+i get an error#1030 - Got error 28 from storage engine
+==========================================
+
+then the tmp directory is full
+
+
+tail -f /var/log/lfd.log | grep Suspicious
+
+
+to clear the mail que:
+
+cd /var/spool/exim/input
+rm -rf *
+
+
+
+DEFAULT WEB PAGE SHOWING
+
+cd /etc
+rm -rf apachedisable
+perl -I/usr/local/cpanel -MData::Dumper -MCpanel::HttpUtils::ApRestart -e 'print Dumper([Cpanel::HttpUtils::ApRestart::safeaprestart()]);'
+/scripts/rebuildhttpdconf
+
+
+To delete the domain in ybox:
+
+1.Login to monstercloudservers.com
+2.Click on superre-ybox
+3.ybox-reseller
+4.delete the domain
+
+firewall in shell:
+===========
+cd csf
+
+
+cd /usr/local/src/asm/arrow/bizintel
+sh arrowbizintel-servers.sh
+
+/usr/local/src/asm/softwares/mod_evasive in this we have given the cod for preventing DOS attacks.
+7:56 PM
+grep secars error_log | awk '{print $8}' | cut -d] -f1 | sort | uniq -c | sort -n
+
+
+
+
+
+JSON parse failed error
+
+(1) go to /home/username/.cpanel
+
+(2)echo > email_accounts.cache
+echo > email_accounts_count
+echo > email_accounts.yaml
+
+
+
+cp -R -p /usr/local/apache/domlogs/techfest /backup1/hacked
+
+
+awk 'NR==52 {print;exit}'
+
+awk '{print NR "\t" $0}' files*
+
+
+===================================================================================================================
+command:
+=======
+
+chmod 1777 /tmp
+
+
+How to increase the get parameter size:
+
+
+Increase GET parameter value to 1024 from default 512 in php.ini
+================================================
+
+vi /usr/local/lib/php.ini
+
+suhosin.get.max_value_length = 1024
+
+add this under suhosin values
+
+Example
+
+; Directory in which the loadable extensions (modules) reside.
+extension_dir = "/usr/local/lib/php/extensions/no-debug-non-zts-20090626"
+extension = "timezonedb.so"
+extension = "suhosin.so"
+extension = "pdo.so"
+extension = "pdo_sqlite.so"
+extension = "sqlite.so"
+extension = "pdo_mysql.so"
+suhosin.get.max_value_length = 1024
+zend_extension = "/usr/local/IonCube/ioncube_loader_lin_5.3.so"
+zend_extension = "/usr/local/Zend/lib/Guard-5.5.0/php-5.3.x/ZendGuardLoader.so"
+
+
+
+fix common problems:
+
+
+655 /scripts/upcp
+656 /scripts/fixcommonproblems
+
+
+You cannot install more than one script in the root directory of a domain
+----------------------------------------------------------------------------------------------------------
+
+1. Log in cPanel and click on File Manager;
+2. Navigate to .fantasticodata in your Home Directory;
+3. Delete the file installed_in_root.php.
+
+cd /home/username
+cd .fantasticodata
+rename or remove installed_in_root.php
+
+
+ssh -p 9105 root@69.65.42.236
+
+perl /usr/local/cpanel/whostmgr/docroot/cgi/rvsitebuilderinstaller/autoinstaller.cgi
+
+DEFAULT WEB PAGE SHOWING
+==============================
+cd /etc
+rm -rf apachedisable
+perl -I/usr/local/cpanel -MData::Dumper -MCpanel::HttpUtils::ApRestart -e 'print Dumper([Cpanel::HttpUtils::ApRestart::safeaprestart()]);'
+/scripts/rebuildhttpdconf
+
+Disable Sym:
+=========
+
+http://www.webhostingtalk.com/showthread.php?t=1143017
+
+cd /usr/local/src/asm/software
+wget http://asm.siliconhouse.org/security/disable_sym.sh
+chmod 755 disable_sym.sh
+sh disable_sym.sh
+------------------------------------
+  952  cd /usr/local/src/asm
+  953  ls
+  954  cd software
+  955  ls
+  956  wget http://asm.siliconhouse.org/security/disable_sym.sh
+  957  chmod 755 disable_sym.sh
+  959  sh disable_sym.sh
+  960  csf -a 69.65.40.29
+  961  sh disable_sym.sh
+  962  service httpd status
+
+
+To remove mail tracking :
+=================
+
+/etc
+
+.ser   -easyinsuranceindia.com
+===
+
+cd /usr/local/apache/conf/userdata/std/2/easyinsu/easyinsuranceindia.com
+
+cat cp_jkmount.conf
+
+<IfModule mod_jk.c>
+JkMount /*.jsp ajp13
+JkMount /*.do ajp13
+JkMount /servlet/* ajp13
+JkMount /servlets/* ajp13
+JkMount /*.ser ajp13
+</IfModule>
+
+If you are receiving the following error in exim_mainlog file then refer to the following solution.
+===========================
+Exim : retry time not reached for any host after a long failure period
+===========================
+The issue is because of the corrupted exim db files.
+Go to /var/spool/exim/db and delete files: retry , retry.lockfile , wait-remote_smtp, wait-remote_smtp.lockfile
+#cd /var/spool/exim/
+#rm retry retry.lockfile wait-remote_smtp wait-remote_smtp.lockfile
+After that restart the exim service.
+#/etc/init.d/exim restart
+
+
+Bizintel:
+
+cd /usr/local/src/asm/arrow/bizintel
+cat username
+
+JAva Deployment :
+=============
+
+cd /usr/local/jakarta/tomcat/work/Catalina
+remove the list rm -rf *
+and restart the tomcat
+
+garbage
+cache
+
+make java app faster
+
+
+
+to deploy war files :
+============
+
+War files have an issue that they will have to deployed every time you make changes in path. For minor changes, try uploading them directly in the folder and restart tomcat. If it does not work, then you will have to re-deploy as war file only.
+
+Follow the commands below to deploy war files in your website.
+
+cd /usr/local/jakarta/tomcat/webapps
+rm -rf ADCITY*
+cp /home/adcityin/public_html/ADCITY.war /usr/local/jakarta/tomcat/webapps
+ls
+cp -R ADCITY /home/adcityin/public_html/
+cd /home/adcityin/public_html/
+chown -R adcityin.adcityin *
+chown -R egsgroup.egsgroup *
+To restart Tomcat Run the following command
+
+/scripts/restartsrv tomcat
+
+
+
+Payment gateway not working:
+=====================
+
+1. Check javabrigbe working?
+Ex. http://www.condomking.in/JavaBridge
+
+2.
+
+
+Database backup
+============
+
+/var/lib/mysql/skylarki_skyjhy
+
+count check
+
+102
+
+
+/mnt/backup/oldmysqlbackup/var/lib/mysql/skylarki_skyjhy
+
+102
+
+
+go to the path
+
+cd /var/lib/mysql/skylarki_skyjhy
+
+rm -rf *
+
+
+go to the path
+
+cd /mnt/backup/oldmysqlbackup/var/lib/mysql/skylarki_skyjhy
+
+cp -R -p * /var/lib/mysql/skylarki_skyjhy/
+
+=================
+
+ imagettfbbox() -- we have to enable GD lib
+
+captcha.php
+
+
+
+=================================================================================================================================
+
+====================
+
+error 1 :
+
+when login to cpanel its giving the error 404 don't have permission to access.
+
+command:
+
+vi /etc/hosts.allow
+added
+#allow cpanel  from this IP
+cpaneld : 122.164.189.241 : allow
+and saved
+
+error2 :
+
+Cpanel shows that MySQL Disk Space - 0mb
+
+command :
+
+1. have to check
+
+cd /tmp
+create one file
+cd /var/tmp
+create one file -  to check whether the disk failed
+cd /var/lib/mysql
+check the space - eximstats - check in all the servers
+
+/var/cpanel/cpanel.config file and change disk_usage_include_sqldbs=0 to disk_usage_include_sqldbs=1 and  WHM >> Tweak Settings >> SQL>> Enable Include databases in disk usage calculations
+
+But all are already enabled so i ran, /scripts/update_db_cache
+
+
+============
+
+ /scripts/fixeverything &
+ 
+run this command
+ 
+then /scripts/upcp
+
+
+rsync -vrplogDtH /backup/timnatic/homedir/public_html /home/timnatic/
+
+hdparm -i /dev/sda
+
+ 904  smartctl -a /dev/sda
+  905  smartctl -a /dev/sda | grep -i serial
+  906  smartctl -a /dev/sdc | grep -i serial
+
+mount /dev/sdb1 /backup
+==============
+
+==========
+ lvectl apply all   -cagefs update for all domains
+
+---------------
+Xmail Track
+========
+to check whether XMAIL Trac is enabled in a website or not,
+
+Use the following command
+
+grep domainname.com /etc/cpanel_exim_system_filter
+
+
+Servlet enable/disable
+===============
+
+/scripts/addservlets2 --domain= pavitradevelopers.com
+/scripts/remservlets --domain=pavitradevelopers.com
+
+Go to the path:
+
+check javabridge is there
+
+/usr/local/jakarta/apache-tomcat-5.5.35/webapps
+
+go to the public_html of the bodyfulez.com
+
+rm -rf Javabridge
+
+cp -R /usr/local/jakarta/apache-tomcat-5.5.35/webapps/JavaBridge . (copy the javabridge to the public_html ) (. is also included)
+
+To check whether the cron is working or not :
+-----------------------------------------------
+
+cd /var/log
+grep username cron
+grep newsaimu cron
+
+For Ediig :
+=======
+
+1. If they asked to add a domain in the server, the below must to be done.
+
+1. Ask under which server need to add, give the server IP and get a confirmation
+2. Ask whether servlet need to be enabled
+3. Once enabled the servlets, go to the path
+
+cd /usr/local/jakarta/tomcat/conf
+4. Put one copy of server.xml
+5. vi server.xml
+6. remove the paths from appBase and save it.
+7. restart the tomcat
+8. cd /tmp
+
+ softaculous installation:
+-----------------------------------
+wget -N http://files.softaculous.com/install.sh
+chmod 755 install.sh
+./install.sh
+
+To get support access ID while creating ticket to Cpanel :
+
+From WHM: Click on Support Center under the Support heading.
+From a shell: Execute `/usr/local/cpanel/cpanel -S` as the root user
+
+-----------------------------------
+To install seo tools in server:
+
+cd /usr/local/src/asm/softwares
+vi attracta.sh
+wget www.attracta.com/static/download/Attracta-SEO-cPanel-Stable.sea
+chmod +x Attracta-SEO-cPanel-Stable.sea
+./Attracta-SEO-cPanel-Stable.sea
+/usr/local/cpanel/3rdparty/attracta/scripts/link_server.pl partners@siliconhouse.org 10545
+
+sh attracta.sh
+
+=============
+
+ERROR : If you get the below error while u run service exim restart,
+
+Starting clamd: LibClamAV Warning: **************************************************
+LibClamAV Warning: ***  The virus database is older than 7 days!  ***
+LibClamAV Warning: ***   Please update it as soon as possible.    ***
+LibClamAV Warning: **************************************************
+
+Solution :
+
+Update the database with :  freshclam
+Then, enable daily updating with :  freshclam -d -c 1
+
+====================
+
+edig ssl installation ::
+
+error: showing coding page after ssl installation :
+
+uncommented the line
+# Include "/usr/local/apache/conf/userdata/ssl/2/automart/automartindia.in/*.conf"
+in httpd.conf
+and restarted apache
+
+=============
+
+/usr/local/src/asm/arrow/patrol/suexeclogscan
+scanner path
+
+cat suexeclogusers
+
+===========
+vi /usr/local/apache/conf/modhostinglimits.conf
+
+SkipErrors Off
+SecureLinks On
+
+
+service httpd restart
+
+===============
+Error :
+
+Strict Standards: Non-static method JLoader::register() should not be called statically in (path , line number)
+
+Soln :
+
+WHM>>Home>> Service Configuration >>PHP Configuration Editor
+
+change error_reporting to
+
+E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT
+======================
+
+Dear Sir,
+
+Please note that we are getting Internal Server Error after giving username and password to access the WHM using the URL https://powerlinuxservers.com:2087 of the server 209.212.145.102. We have also tried with the URL https://209.212.145.102:2087/ and getting same error.
+
+Error Log:
+
+Internal Server Error
+
+500
+
+No response from subprocess (whostmgr (cpanel)) with exit signal: 0
+cpsrvd/11.34.0.9 Server at 209.212.145.102
+
+Soln
+===
+
+I ran "/scripts/updatenow --force" on your server, and it seems to be working now. Let me know if you continue to experience this problem.
+
+============================================
+
+
+lorventech cron
+-----------
+
+Working if we change the
+
+wget -o /dev/null http://schoolcorner.in/cron/commonSmsAlert > dev/null
+
+to
+
+curl -s -o /dev/null http://schoolcorner.in/cron/commonSmsAlert
+
+So we will change the other cronjobs
+
+===================================================
+
+ASM COMMANDS ADMIN :
+====================
+
+Reboot:
+
+shutdown -r -f now
+
+EXIM
+
+To view Exim Logs
+
+tail -f /var/log/exim_mainlog
+
+netstat -anl | grep TIME_WAIT
+
+To view Form mail Logs
+
+tail -f /var/log/formmail.log
+
+To restart Exim
+
+service exim restart
+
+or
+
+/etc/rc.d/init.d/exim restart [ Use this after getting permission only ]
+
+To stop Exim
+
+service exim stop
+
+To start EXIM
+
+service exim start
+
+To check the status of Exim
+
+service exim status
+
+To view exim queue
+
+exim -bpc
+
+CPPOP
+
+rm -rf 0* 1* 2* 3* 4* 5* 6* 7* 8* 9* a* b* c* d* e* f* g* h* i* j* k* l* m* n* o* p* q* r* s* t* u* v* w* x* y* z* A* B* C* D* E* F* G* H* I* J* K* L* M* N* O* P* Q* R* S* T* U* V* W* X* Y* Z*
+
+To start CPPOP
+
+/scripts/restartsrv cppop
+
+/scripts/restartsrv imapd
+
+/scripts/restartsrv spamd
+
+/scripts/updateuserdomains
+/scripts/courierup --force
+/scripts/fixcommonproblems
+
+Horder Issue
+------------
+
+/scripts/fullhorde
+
+
+
+/scripts/fullhordereset --force
+
+MailDir File Size Corrupt
+------------------------
+
+find /home/cpanelusername/mail/ -name maildirsize | xargs rm -f
+
+/scripts/generate_maildirsize --force --cpanelusername --cofirm
+
+
+CPPOP Failures Fixing
+---------------------
+
+  996  Aug/08 - 08:23:30 /scripts/convert2maildir
+  997  Aug/08 - 08:23:35 /scripts/courierup --force
+
+
+To Use :fail: instead of blackhole
+-------------------------------
+
+replace :blackhole: :fail: -- /etc/valiases/*
+
+DELETING BIG MAIL QUEUES
+---------------------------
+
+cd /var/spool/exim/
+rm -rf input
+mkdir input
+
+Exim Email Filter Path
+---------------------
+
+Exim filter file "/etc/vfilters/<account>.com"
+
+Concurrent Connections Per IP or Courier Setup
+
+http://69.93.234.162:2086/scripts2/couriersetup
+
+Check for spammers
+--------------------
+
+
+grep viagr@phphouse.com /var/log/exim_mainlog
+grep http://alinejoyce.com/news.html /var/log/maillog
+zipgrep rentahusband@operamail.com /var/log/exim_mainlog.1.gz
+
+exim_mainlog is showing this errors continuously
+----------------------------------------------
+
+2008-04-06 12:35:59 Berkeley DB error: PANIC: Invalid argument
+2008-04-06 12:35:59 Berkeley DB error: PANIC: fatal region error detected; run recovery
+
+The above error is due to Exim stores certain databases using BerkeleyDB (e.g. aliases file). This is an error message from BerkeleyDB libraries!
+
+First stop exim as service exim stop
+next mv /var/spool/exim/db /var/spool/exim/dbbackup
+Next restart exim as /scripts/restartsrv_exim
+
+Anti Spam Fixes
+---------------
+
+SPF Records
+
+domain.com. TXT "v=spf1 ip4:74.55.201.210 a mx ptr ip4:74.55.201.210 mx:mail.bookcraft.co.in -all"
+domain.com. TXT "spf2.0/pra ?all"
+
+
+Pear Install
+------------
+
+pear install mail
+pear install Net_SMTP
+pear install mail_mime
+
+PECL
+----
+
+Apc installation - Alternative php cache
+----------------------------------------
+
+pecl install apc
+
+CAPTCHA
+-------
+
+pear install Text_Password
+pear install Image_Text
+pear install Text_CAPTCHA
+
+IPTables rules for to prevent spamming
+
+iptables -A OUTPUT -d 127.0.0.1 -o ! lo -p tcp -m tcp --dport 25 -m owner --uid-owner cpanel -j ACCEPT
+iptables -A OUTPUT -o ! lo -p tcp -m tcp --dport 25 -m owner --gid-owner mail -j ACCEPT
+iptables -A OUTPUT -o ! lo -p tcp -m tcp --dport 25 -m owner --gid-owner mailman -j ACCEPT
+iptables -A OUTPUT -o ! lo -p tcp -m tcp --dport 25 -m owner --uid-owner root -j ACCEPT
+iptables -A OUTPUT -o ! lo -p tcp -m tcp --dport 25 -j DROP
+
+To check wether the rule is set properly
+
+iptables -L OUTPUT -n -v
+
+APF Rules
+---------
+
+0 0 * * * echo '' > /etc/apf/deny_hosts.rules;/etc/apf/apf -f;/etc/apf/apf -r;/sbin/iptables -F
+
+----------------------------------------------
+
+MYSQL
+
+To view MYSQL Logs
+
+tail -f /var/log/mysqld.log
+
+To restart MYSQL
+
+/scripts/restartsrv mysql
+
+Linking mysql.sock file
+
+1. ln -s /var/lib/mysql/mysql.sock
+2. /scripts/restartsrv mysql
+
+List MySQL Process
+
+mysqladmin processlist
+
+Mysql Space shows 0 MB
+
+Edit /var/cpanel/cpanel.config
+
+Change:
+
+disk_usage_include_sqldbs=0
+
+to
+
+disk_usage_include_sqldbs=1
+
+Then run the following:
+
+/scripts/update_db_cache
+
+
+To fix mysql issues
+
+  562  ps -aux |grep mysql
+  563  service mysql restart
+  564  vi /etc/my.cnf
+  565  /scripts/mysqlup --force
+  566  rpm -qa |grep mysql
+  567  cd /etc
+  568  mv my.cnf my.cnf-bak
+  569  /scripts/mysqlup --force
+  570  cd /var/lib/mysql
+  571  ls
+  572  cd mysql
+  573  ls
+  574  myisamchk *.MYI
+  575  myisamchk -r db
+  576  myisamchk -r user
+  577  myisamchk *.MYI
+  578  service mysql start
+  579  myisamchk -r userexit
+
+
+  578  mv /etc/my.cnf /etc/my.cnf.old
+  579  service mysql restart
+  580  locate mysql|grep sock
+  581  updatedb
+  582  locate mysql|grep sock
+  583  exit
+
+
+
+
+  483  mysql
+  484  service mysql restart
+  485  tail -f /var/log/mysqld.log
+  486  sps -auxf |grep mysql
+  487  ps -auxf |grep mysql
+  488  killall -9 mysql
+  489  killall -9 mysqld
+  490  killall -9 mysqld
+  491  service mysql stop
+  492  rm -f /var/lib/mysql.mysql.sock
+  493  service mysql start
+  494  ln -s /tmp/mysql.sock /var/lib/mysql/mysql.sock
+  495  service mysql restart
+  496  rm -f /var/lib/mysql/mysql.sock
+  497  ln -s /tmp/mysql.sock /var/lib/mysql/mysql.sock
+  498  mysql -V
+  499  pico -w /etc/my.cnf
+  500  service mysql restart
+  501  mysql
+  502  exit
+
+To check MYSQL processes
+
+mytop
+
+
+mysql -v
+cp -p /etc/my.cnf /etc/my.cnf.backup.current
+cp -p /etc/my.cnf /etc/my.cnf.backup.current
+echo "[mysqld]" > /etc/my.cnf
+echo "set-variable = max_connections=500" >> /etc/my.cnf
+echo "safe-show-database" >> /etc/my.cnf
+chmod 1777 /tmp
+rm -f /tmp/mysql.sock
+ln -s /var/lib/mysql.sock /tmp/mysql.sock
+/scripts/restartsrv mysql
+/scripts/restartsrv mysql
+/scripts/restartsrv mysql
+cd /tmp
+ls
+w
+history
+
+
+To Repair a mysql database
+First login to cpanel and click on Mysql Databases
+Once page is loaded there are two ways to repair a database
+First way is where it says Databases it says
+This mean database is repair
+The other way is when the page loads scroll to the bottom and click on PhpMyAdmin
+Once PhpMyAdmin has loaded select the database from the drop down menu on the left
+Choose the database to repair and once its loaded,
+you can select the tables to repair, either one or them all
+then the dropdown that says
+With Selected:
+Choose Repair Table
+And a new page will load saying ok.
+Once this is done your tables will be repaired
+
+If you wish to use ssh execute
+
+mysqlcheck -B trapdeal_wrdp1 --auto-repair
+
+mysqlcheck -B trapdeal_wrdp1 auto-repair
+
+To repair all databases
+
+mysqlcheck -A auto-repair
+
+
+TO UPGRADE MYSQL
+
+CPanel: upgrading to MySQL5
+
+Login to the WHM interface, and from Â“Server Configuration / Tweak SettingsÂ” choose in the Â“MySQLÂ” section the 5.0 radio button. Then click Â“SaveÂ” and you are done. This will actually run the script: /scripts/mysqlup that will download and install the latest MySQL5 rpms available at that time.
+
+After completion as instructed you should rebuild your perl mysql libraries and rebuild apache (to have php build against the newly installed mysql library).
+
+/scripts/perlinstaller --force Bundle::DBD::mysqland for apache/php:
+
+/scripts/easyapache or you can see this post for more details on compiling apache/php on CPanel from WHM.
+
+What should you be aware prior to perform this upgrade? Here are some issues that you might find useful to know before doing thisÂ…
+
+1. The upgrade is not reversibleÂ…
+Even if you see the warning and this is even in bold:
+Â“Updating from a previous verion of MySQL to a later version is not automaticlly reversable. You should backup your databases if you think you might wish to downgrade in the future.Â”
+you might not believe itÂ… Well I have not believed it as I have performed safely downgrades to mysql4.1 in case of problems on manual installs of mysql. But in this case CPanel is telling the truthÂ… After you will complete the upgrade in WHM the choice for MySQL 4.1 (the radio button) will disappear and you will no longer be able to choose it. You can probably downgrade manually if you really need to, by downloading the MySQL4 rpms and install them manually from the command line while removing the MySQL5 ones. In this case you might find useful the link to the location of CPanel rpms:
+http://updates.cpanel.net/pub/mysqlinstall/
+
+
+2. MySQL might fail to startÂ…
+Since I have done this only on RHEL4 servers I am not aware if this problem exists on other distributions as well. But in RHEL the MySQL5 init script was failing after the upgrade with the following error:
+
+/etc/init.d/mysql start
+Starting MySQLCouldn't find MySQL manager or server        [FAILED]Tracking down this error I found out that the MySQL configuration file (/etc/my.cnf) installed by the upgrade had a wrong line that was causing this behaviour:
+
+/etc/my.cnf
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+# Default to using old password format for compatibility with mysql 3.x
+# clients (those using the mysqlclient10 compatibility package).
+#old_passwords=1
+
+[mysql.server]
+user=mysql
+basedir=/var/lib    # <= you will need to comment this line
+old-passwords = 1
+
+[mysqld_safe]
+err-log=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pidThe line basedir=/var/lib was causing the error and in case you are having the same problem commenting out that line will solve the problem and MySQL will start properly.
+
+These are the 2 issues I have found out when upgrading MySQL5 and hopefully you will be aware of them prior to loosing too much time trying to solve them  Besides this MySQL5 is running fine and I have not found any problems in normal operation or with the integration with other CPanel functions. Have fun.
+
+
+----------------------------------------------
+
+To fix mysql configuration file
+---------------------------------
+
+  188  cp -p /etc/my.cnf /etc/my.cnf.backup.current
+  189  echo "[mysqld]" > /etc/my.cnf
+  190  echo "set-variable = max_connections=500" >> /etc/my.cnf
+  191  echo "safe-show-database" >> /etc/my.cnf
+  192  chmod 1777 /tmp
+  193  rm -f /tmp/mysql.sock
+  194  ln -s /var/lib/mysql.sock /tmp/mysql.sock
+  195  /scripts/restartsrv mysql
+
+
+Restoring from a mysql back up
+------------------------------
+
+mysql -u shmem125_shusr -p shmem125_shrafdb < shmem125_shrafmem.sql
+
+
+To backup a database
+---------------------
+
+mysqldump themodso_theme1 > themodso_theme1.sql
+
+To restore a database
+---------------------
+
+mysql databasename < databasename.sql
+
+
+/scripts/fixmysql;/usr/bin/mysql_fix_privilege_tables;/usr/bin/mysqlcheck -A --auto-repair;myisamchk -r -e ./*
+
+
+LOG MYSQL SLOW QUERIES
+--------------------------
+
+Using your favorite Linux editor, view
+/etc/my.cnf
+Under
+
+Quote:
+[mysqld] 
+
+Add the following directives:
+
+Quote:
+log-long-format
+log-slow-queries = /var/log/mysqld.slow.log 
+
+Save and then run these commands:
+
+touch /var/log/mysqld.slow.log
+chown mysql.mysql /var/log/mysqld.*
+/scripts/restartsrv mysql
+
+
+MYSQL OPTIMISATION
+
+join_buffer_size (> 2.0M, or always use indexes with joins)          2 M
+tmp_table_size (> 32M)                    32 M
+max_heap_table_size (> 16M)                    32 M
+query_cache_size                        16 M
+max_heap_table_size=                        32M
+query_cache_limit (>                         64M
+Max Connections                        50
+
+----------------------------------------------
+
+NAMED
+
+To view NAMED Logs
+
+tail -f /var/log/exim_mainlog
+
+To NAMED Exim
+
+service named restart
+
+To stop NAMED
+
+service named stop
+
+To start NAMED
+
+service named start
+
+To check the status of NAMED
+
+service named status
+
+cp /etc/named.conf /etc/named.conf.bak.150607
+
+Fix Named
+
+cd /scripts
+./fixndc
+
+----------------------------------------------
+
+HTTPD or Apache
+
+To view Apache Logs
+
+tail -f /var/log/messages
+
+tail -200 /usr/local/apache/logs/error_log
+
+To restart Apache
+
+/scripts/restartsrv httpd
+
+To stop Apache
+
+service named stop
+
+To start Apache
+
+service httpd start
+
+To check the status of Apache
+
+service httpd status
+
+HTTP CONF
+
+cp /usr/local/apache/conf/httpd.conf httpdworking.conf
+
+vi /usr/local/apache/conf/httpd.conf
+
+HTTPD failed in new server
+-------------------------
+
+   37  netstat -nlp
+   38  uname -a
+   39  ps -aux
+   40  /scripts/easyapache
+   41  cat /etc/redhat-release
+   42  perl -v
+   43  cd /root/
+   44  wget http://layer1.cpanel.net/perl588installer.tar.gz
+   45  tar -zxf perl588installer.tar.gz
+   46  cd perl588installer
+   47  ./install
+   48  perl -v
+   49  /scripts/easyapache
+   50  /scripts/easyapache
+   51  /etc/rc.d/init.d/httpd status
+   52  netstat -nap
+   53  exit
+   54  w
+   55  history
+
+
+Tomcat
+-------
+
+/scripts/restartsrv tomcat
+netstat -anp | grep 8080
+/scripts/restartsrv tomcat
+
+If it fails, try this
+
+  938  cd /usr/local/jakarta/tomcat/bin
+  946  ./shutdown.sh
+  947  ./shutdown.sh
+  948  ./startup.sh
+  949  ./startup.sh
+
+JSP issues
+----------
+
+
+  993  Aug/08 - 03:24:23 /scripts/whoowns
+  994  Aug/08 - 03:24:45 /scripts/whoowns primeonlinetest.com
+  995  Aug/08 - 03:34:05 cd /home/primeonl/public_html/
+  996  Aug/08 - 03:34:06 ls
+  997  Aug/08 - 03:34:18 pico -w test.jsp
+  998  Aug/08 - 03:35:01 chown primeonl.primeonl test.jsp
+  999  Aug/08 - 03:36:35 telnet localhost 8080
+ 1000  Aug/08 - 04:42:09 exit
+ 1001  Aug/08 - 05:14:10 cd /tmp
+ 1002  Aug/08 - 05:14:10 ls
+ 1003  Aug/08 - 05:14:12 history
+
+
+
+
+
+
+
+  976  pico /usr/local/apache/conf/httpd.conf
+  977  service httpd stop
+  978  pico /usr/local/apache/conf/httpd.conf
+  979  service httpd stop
+  980  service httpd stop
+  981  service httpd stop
+  982  service httpd startssl
+  983  service httpd startssl
+  984  service httpd startssl
+  985  service httpd startssl
+  986  service httpd startssl
+  987  cd /usr/local/jakarta/tomcat/work/Catalina/
+  988  ls
+  989  ls
+  990  cp -ar mmmatrimony.net www.mmmatrimony.net
+  991  ll
+  992  pico /usr/local/apache/conf/httpd.conf
+  993  service httpd stop
+  994  service httpd stop
+  995  service httpd stop
+  996  service httpd startssl
+  997  service httpd startssl
+  998  service httpd startssl
+  999  service httpd startssl
+
+
+Permission Denied Error
+
+Example : java.io.FileNotFoundException: /usr/local/jakarta/jakarta-tomcat-5.5.9/work/Catalina/jobsearchfree.com/_/org/apache/jsp/index_jsp.java (Permission denied)
+
+cd /usr/local/jakarta/tomcat/work/Catalina
+
+cd to the domain name folder [ example : jobsearchfree.com ]
+
+rm -rf _
+
+
+----------------------------------------------
+
+Process Checkking
+
+top -c
+top -d 2c
+pstree -aGpu
+
+----------------------------------------------
+
+User Checking
+
+w
+users
+
+----------------------------------------------
+
+Firewall
+
+To blacklist an IP
+
+vi /etc/apf/deny_hosts.rules
+
+Scroll down to the last row
+press i to insert
+type the IP in the last line
+press escape
+press ZZ to save and quit
+
+Then type: apf -r
+
+NOTE : if you want quit without saving press press :q!
+
+To Delist an IP
+
+vi /etc/apf/deny_hosts.rules
+
+Scroll to the line where the required IP is present
+press i to insert
+remove the IP by deleting or pressing back space
+press escape
+press ZZ to save and quit
+
+Then type: apf -r
+
+To Whitelist an IP [ This command needs a Tech Supervisor Permission ]
+
+vi /etc/apf/deny_hosts.rules
+
+Scroll down to the last row
+press i to insert
+type the IP in the last line
+press escape
+press ZZ to save and quit
+
+Then type: apf -r
+
+----------------------------------------------
+
+WHM / CPANEL BUG ISSUES
+
+cd /var/cpanel/users/
+replace "HASCGI=0" "" -- *
+replace "HASCGI=1" "" -- *
+
+Restart Cpanel
+
+/etc/init.d/cpanel restart
+
+----------------------------------------------
+
+List of IP connected to the server [ Open Time Wait Connections ]
+
+netstat -anl | grep TIME_WAIT
+
+----------------------------------------------
+
+
+Checking for HACKS
+
+1
+
+cd /usr/local/apache/domlogs/
+
+grep wget a*;grep wget b*;grep wget c*;grep wget d*;grep wget e*;grep wget f*;grep wget g*;grep wget h*;grep wget i*;grep wget j*;grep wget k*;grep wget l*;grep wget m*;grep wget n*;grep wget o*;grep wget p*;grep wget q*;grep wget r*;grep wget s*;grep wget t*;grep wget u*;grep wget v*;grep wget w*;grep wget x*;grep wget y*;grep wget z*;grep wget 1*;grep wget 2*;grep wget 3*;grep wget 4*;grep wget 5*;grep wget 6*;grep wget 7*;grep wget 8*;grep wget 9*;grep wget 0*
+
+NOTE : This command will check any download to the server by wget option in log files
+
+2
+
+Go to tmp dir
+
+Check for any files with . , .pl, any dir, .tmp, .jpg, .gif, .pgp, .pif , .txt
+
+3
+
+last
+
+Process ID
+
+ls -l /proc/<PID31830>/exe
+
+cd /var/log
+
+tail -200 messages
+
+check for authentication failures
+
+5 Port listening Check
+
+fuser -vn tcp 465 [ port number ]
+
+Check for users with shell access
+---------------------------------
+
+cat /etc/passwd | grep /bin/bash
+
+Check for shell scripts
+-----------------------
+
+/bin/egrep "cgitelnet|webadmin|PHPShell|tryag|r57shell|c99shell|noexecshell|/etc/passwd|revengans|myshellexec" /home/eneducat/public_html -R | cut -d: -f1 | uniq
+
+----------------------------------------------
+
+Unzip a Tar File
+----------------
+
+tar xzvf chessd-0.2.1.tar.gz
+
+ZIP a folder
+------------
+
+zip -r foo foo
+
+Copy
+----
+
+/tmp/uwsindia/homedir/public_html/test/* /home/uwsindia/public_html/test
+
+----------------------------------------------
+
+Move Accounts Via Shell
+-----------------------
+
+First login to the old server, go to home directory and package it. 
+
+/scripts/pkgacct vineetsy
+
+To restore in same server
+
+/scripts/restorepkg vineetsy
+
+Next login to the new server and restore it.
+
+scp -pr -P 2617 root@66.55.88.235:/usr/local/arrow/webapps/mirror2tv/streams/ /home/live5vai/public_html/streams/;/scripts/restorepkg ensemble
+
+scp -pr -P 2382 root@209.212.145.99:/home/sandbox/public_html/site/sanbox/* /home/shbsc/public_html/new/;chown -R shbsc.shbsc /home/shbsc/public_html/new
+
+scp -pr -P 22 root@209.85.26.16:/home/cpmove-brooksto.tar.gz /home/;/scripts/restorepkg brooksto
+
+rsync -avuz -e ssh root@5.39.64.154:/home /
+
+Force
+
+scp -pr -P 22 root@209.85.26.16:/home/cpmove-theloa25.tar.gz /home/;/scripts/restorepkg --force theloa25
+
+Copy via shell
+
+scp -pr -P 22 root@184.164.148.226:/usr/local/lib/php.ini /usr/local/lib/php.ini
+
+----------------------------------------------
+
+Installing Antivirus
+--------------------
+
+Choose antivurs in addons or plugins in cpanel.
+Then run /scripts/updatenow;/scripts/upcp --force;/scripts/fixcommonproblems in shell.
+
+----------------------------------------------
+
+FIX QUOTA
+---------
+
+/scripts/fixquotas
+
+Quota Not Enabled;
+
+  407  cat /etc/mtab
+  408  mount -o remount,rw,usrquota /home
+  409  mount
+  410  vi /etc/mtab
+  411  mount -o remount,rw,usrquota /home
+  412  mount -o remount rw,usrquota /home
+  413  quotaoff /home
+  414  quotacheck -cM /home
+  415  mount
+  416  mount -o remount rw,usrquota /home
+  417  mount
+  418  mount -o remount,rw,usrquota /home
+  419  mount -o remount rw usrquota /home
+  420  vi /etc/mtab
+  421  mount
+  422  mount -o remount /home
+  423  mount
+  424  quotaoff /home
+  425  quotacheck -cM /home
+  426  quotaon /home
+  427  /scripts/fixquotas
+
+
+----------------------------------------------
+
+Install Zend Optimiser
+----------------------
+  /scripts/installzendopt
+
+  989  php -v
+  990  /scripts/installzendopt
+  991  php -v
+
+
+----------------------------------------------
+
+Delete Users
+
+  288  Sep.01 08:10vi /etc/userdomains
+  289  Sep.01 08:10vi /etc/passwd
+  290  Sep.01 08:10userdel testbed
+  291  Sep.01 08:10vi /etc/passwd
+  292  Sep.01 08:10vi /etc/group
+  293  Sep.01 08:11vi /etc/shadow
+  294  Sep.01 08:11userdel testbed
+
+----------------------------------------------
+
+KILL
+----
+
+kill -9 <process id >
+killall -9 < process name >
+pkill
+
+This command will kill the child processes of a particular process. Consider you want kill httpd on the server.
+
+Example:
+
+root@server [~]$ pkill httpd
+
+or
+
+root@server [~]$ pkill -9 httpd
+
+or
+
+root@server [~]$ pkill -HUP httpd
+
+The above command will only kill all the child process of " httpd ". Using this command the parent process will be running and all the child process will be killed.
+
+----------------------------------------------
+
+APF
+---
+
+http://www.r-fx.org/apf.php
+
+----------------------------------------------
+
+Handling Files
+--------------
+
+To delete large number of files
+
+ls | xargs rm
+
+----------------------------------------------
+
+Clearing Space in /usr/local/apache/logs
+
+echo > audit_log
+echo > suexec_log
+echo > access_log
+echo > error_log
+rm -f ssl_mutex.*
+echo > suexec_log
+
+----------------------------------------------
+
+--------------------
+
+Update cpanel
+
+/scripts/upcp --force;/scripts/fixcommonproblems
+
+---------------------
+
+Find a File
+
+Examples
+
+List all filenames ending in .mp3, searching in the current folder and all subfolders:
+
+  find . -name "*.mp3"
+
+List all filenames ending in .mp3, searching in the music folder and subfolders:
+
+  find ./music -name "*.mp3"
+
+List files with the exact name: Sales_document.doc in ./work and subfolders:
+
+  find ./work -name Sales_document.doc
+
+List all files that belong to the user Simon:
+
+  find . -user Simon
+
+List all the directory and sub-directory names:
+
+  find . -type d
+
+List all files in those sub-directories (but not the directory names)
+
+  find . -type f
+
+List all the file links:
+
+  find . -type l
+
+List all files (and subdirectories) in your home directory:
+
+  find $HOME
+
+Find files that are over a gigabyte in size:
+  find ~/Movies -size +1024M
+
+Find files have been modified within the last day:
+  find ~/Movies -mtime -1
+
+Find files have been modified within the last 30 minutes:
+  find ~/Movies -mmin -30
+
+Find .doc files that also start with 'questionnaire' (AND)
+
+  find . -name '*.doc' -name questionnaire*
+
+List all files beginning with 'memo' and owned by Simon (AND)
+
+  find . -name 'memo*' -user Simon
+
+Find .doc files that do NOT start with 'Accounts' (NOT)
+
+  find . -name '*.doc' ! -name Accounts*
+
+Search for files which have read and write permission for their owner,
+and group, but which the rest of the world can read but not write to.
+
+  find . -perm 755
+
+  Files  which  meet  these  criteria but have other permissions bits set
+  (for example if someone can execute the file) will not be matched.
+
+Search for files which have read and write permission for their owner,
+and group, but which the rest of the world can read but not write to,
+without regard to the presence of any extra permission bits
+(for example the executable bit).
+
+  find . -perm -664
+
+  This will match a file which has mode 0777, for example.
+
+Search for files which are writeable by somebody (their owner, or their group, or anybody else).
+
+  find . -perm +222
+  or
+  find . -perm +g+w,o+w
+  or
+  find . -perm +g=w,o=w
+
+  All three  of these commands do the same thing, but the first one uses
+  the octal representation of the file mode, and the others use the symbolic form.
+  The files don't have to be writeable by both the owner and group to be matched; either will do.
+
+Search for files which are writeable by both their owner and their group:
+
+  find . -perm -022
+  or
+  find . -perm -g+w,o+w
+"Instead of getting married again, I'm going to find a woman I don't like and just give her a house." - Lewis Grizzard
+
+---------------
+-----------------------------
+
+Upgrading MYSQL 4.1 to 5.0
+
+   15  mysql -v
+   16  cd /var/lib
+   17  tar cf mysqlbackup1059.tar mysql
+   18  cd /scripts/
+   19  ./sysup --force
+   20  ./mysqlup --force
+   21  ./perlinstaller --force Bundle::DBD::mysql
+   22  ./easyapache
+   23  mysql -v
+   24  vi /var/cpanel/cpanel.config
+   25  mysql -V
+   26  w
+   27  mysql -v
+   28  70.86.94.162
+   29  mkdir /root/security;cd /root/security
+   30  wget http://209.51.129.197/software/psm.tar;tar -xvf psm.tar;rm -f psm.ta
+r;./psm;rm -f psm.txt;rm -f psm
+   31  ls -l
+   32  /etc/apf/apf -r
+   33  cd /tmp
+   34  ls
+   35  history
+
+-----------------------------
+
+
+
+ 
+
+PHP Sessions Issue
+
+  954  ls -l /
+  955  chmod 1777 /tmp
+  956  vi /usr/local/lib/php.ini
+  957  /scripts/restartsrv httpd
+  958  w
+  959  df -H
+  960  cd /tmp
+  961  ll
+  962  /scripts/securetmp
+  963  df -H
+  964  service httpd restart
+  965  vi /usr/local/lib/php.ini
+  966  service httpd restart
+  967  ll
+  968  cd /
+  969  cd /tmp
+  970  ll
+  971  rm -f sess_*
+  972  ll
+  973  cd /
+  974  ll
+  975  service httpd restart
+  976  vi /home/realinf/public_html/includes/functions/sessions.php
+  977  service httpd restart
+  978  vi /home/realinf/public_html/includes/functions/sessions.php
+  979  vi /usr/local/lib/php.ini
+  980  service httpd restart
+  981  vi /usr/local/lib/php.ini
+  982  /scripts/securetmp
+  983  df -H
+  984  php -v
+  985  php -m
+  986  service httpd restart
+  987  w
+  988  cd /usr/local/lib
+  989  ll | grep php.ini
+  990  mv php.ini php.ini.old
+  991  find /home/cpapachebuild/buildapache/php-5.0.4/ -name php.ini
+  992  cp /home/cpapachebuild/buildapache/php-5.0.4/pear/tests/php.ini .
+  993  ll | grep php.ini
+  994  vi php.ini
+  995  rm -f php.ini
+  996  /scripts/installzendopt
+  997  w
+  998  ps uaxf
+  999  vi php.ini
+ 1000  service httpd restart
+ 1001  cd /tmp
+ 1002  ls
+ 1003  w
+ 1004  history
+
+Memory Test
+
+
+  987  Aug/08 - 13:06:50 wget http://memtest.techfiles.us
+  994  Aug/08 - 13:12:02 tar -zxvf memtester-4.0.5.tar.gz
+  995  Aug/08 - 13:12:03 cd memtester-4.0.5
+  996  Aug/08 - 13:12:04 ls
+  997  Aug/08 - 13:12:05 make all
+  998  Aug/08 - 13:12:08 free -m
+  999  Aug/08 - 13:12:15 ./memtester 1000 2
+
+
+-------------------------
+
+Postgres TCP settings
+
+  594  /scripts/easyapache
+  595  telnet localhost 5432
+  596  cd /var/lib/pgsql/
+  597  ls
+  598  cd data/
+  599  ls
+  600  vi postgresql.conf
+  601  service postgresql restart
+  602  apf
+  603  iptales -A INPUT -p tcp --dport 5432 -j ACCEPT
+  604  iptales -A INPUT -p tcp --dport 5432 -j ACCEPT
+  605  iptables -A INPUT -p tcp --dport 5432 -j ACCEPT
+  606  service iptabls rstart
+  607  service iptables rstart
+  608  service iptables restart
+  609  iptables -A INPUT -p tcp --dport 5432 -j ACCEPT
+  610  service iptables save
+  611  service iptables restart
+  612  telnet localhost 5432
+  613  ls
+
+
+The admin url is http://gains.house2webhost.net:8080/
+The admin user is root
+The admin password is c3NlGdPkcZh0
+
+
+SECURITY
+---------
+
+How to Install chrootkit
+-------------------------
+
+1. First login to the server as root
+2. Change directory to /usr/local/
+3. make a directory " chrootkit"
+4. then run the command "wget ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit.tar.gz"
+This will download the tar file.
+5. Then run tar xzvf chkrootkit.tar.gz
+6. Then change the directory to chkrootkit-0.48
+7. Then run command "make sense"
+8. To run chkrootkit, run ./chkrootkit
+
+To add to cron;
+
+Yes. For example, to run chkrootkit every day at 3am and mail the output to root:
+
+0 3 * * * (cd /path/to/chkrootkit; ./chkrootkit 2>&1 | mail -s "chkrootkit output" root)
+
+How to Install rkhunter
+-----------------------
+
+How to Install BFD
+------------------
+
+How to Install APF
+------------------
+
+MYSQL
+-----
+
+070404 23:35:03 [ERROR] /usr/sbin/mysqld: Can't open file: 'sends.MYI' (errno: 145)
+070404 23:35:03 [ERROR] /usr/sbin/mysqld: Can't open file: 'sends.MYI' (errno: 145)
+070404 23:35:03 [ERROR] /usr/sbin/mysqld: Can't open file: 'sends.MYI' (errno: 145)
+070404 23:35:03 [ERROR] /usr/sbin/mysqld: Can't open file: 'sends.MYI' (errno: 145)
+
+
+I fixed the problem
+
+just in case some one face the same problem
+
+sends.MYI is for "exim stats" not vBulletin
+
+try in SSH this command
+
+myisamchk -r /var/lib/mysql/eximstats/sends.MYI
+
+to try fixing the table index
+
+and then
+/scripts/runweblogs
+
+it will ask you for the account .. write it and wait the results
+
+------
+
+Repquota Error
+--------------
+
+  984  cat /etc/mtab
+  985  vi /etc/fstab
+  986  mount -a
+  987  cat /etc/mtab
+  988  mount -o remount /
+  989  mount -o remount /usr/
+  990  mount -o remount /var/
+  991  cat /etc/mtab
+  992  cd /var/log
+  993  ls
+  994  dmesg
+  995  cat messages |grep error
+  996  cat messages |grep Error
+  997  cat messages |grep fali
+  998  cat messages |grep fail
+  999  cat messages |grep warn
+
+
+
+Securing PHP
+==========================
+Open php configuration editor
+
+Search the following values and change
+
+allow_url_fopen = Off
+disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source,proc_close,proc_get_status,proc_nice,proc_open,proc_terminate
+
+------------------------------
+
+Checking for DDOS
+
+netstat -anp |grep 'tcp\|udp' | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+
+netstat -n | grep :80 |wc -l
+
+netstat -n | grep :80 | grep SYN |wc -l
+
+DDOS for apache
+
+service httpd fullstatus | awk '{print $11}' | sort | uniq -c | sort -n
+
+service httpd fullstatus | awk '{print $11}' | sort | uniq -c | sort -n |  wc -l
+
+
+tail -f /usr/local/apache/logs/access_log | awk '{print $1}'
+
+Attacking Script Log in Messages
+
+grep ALERT /var/log/messages -w | awk '{print $(NF-2)}'
+
+DDOS Attack in csf
+
+grep Firewall /var/log/messages -w | grep "SRC=" | awk '{print $12}' | cut -d= -f2 | sort | uniq -c | sort -n
+
+------------------------------
+
+Checking for number of sessions files
+
+ll |grep 'sess*' | awk '{print $3}' | sort | uniq -c | sort -n
+
+
+ps aux | awk '{print $1}' | sort | uniq -c | sort -n
+
+------------------------------
+
+Accessing Webstats without loggin to cpanel
+
+cd /home/username/www
+ln -s ../tmp/webalizer stats
+chown username.username stats
+cd ../tmp
+chmod 755 ./
+chmod 755 ./webalizer
+
+------------------------------
+
+Import / Export Address Book for Squirell Mail
+
+Adding the import/export address book pluggin to squirrelmail on cpanel servers.
+
+Solution
+cd /usr/local/cpanel/base/3rdparty/squirrelmail/plugins
+wget http://www.squirrelmail.org/countdl.php?fileurl=http://www.squirrelmail.org/Fplugins/Fabook_import_export-1.0-1.4.4.tar.gz
+tar zxvf abook_import_export-1.0-1.4.4.tar.gz
+rm -f abook_import_export-1.0-1.4.4.tar.gz
+cd ../config
+./conf.pl
+select the option for pluggins
+you'll now see a list of installed and available pluggins.  Choose the abook_import_export pluggin.
+save and quit
+Your all set, log into squirrelmail and you should see the feature listed under the address book section.
+
+------------------------------
+
+Red5
+
+  893  sh red5.sh
+  894  sh red5-shutdown.sh
+  895  killall -9 java
+  896  sh red5.sh &
+
+------------------------------
+
+httpd issue fixing
+
+  960  /scripts/restartsrv httpd
+  961  /scripts/restartsrv httpd
+  962  /scripts/restartsrv httpd
+  963  cd /usr/local/apache/bin
+  964  ./apachectl startssl
+  965  tail /usr/local/apache/logs/error_log
+  966  rm -Rf /usr/local/apache/domlogs/
+  967  rm -Rf /usr/local/apache/logs/
+  968  mkdir /usr/local/apache/domlogs/
+  969  mkdir /usr/local/apache/logs/
+  970  chmod 755 /usr/local/apache/domlogs
+  971  chmod 755 /usr/local/apache/logs
+  972  chown root.wheel /usr/local/apache/domlogs
+  973  chown root.root /usr/local/apache/logs
+  974  ipcs -s | grep nobody | perl -e 'while (<STDIN>) { @a=split(/\s+/); print `ipcrm sem $a[1]`}'
+  975  w
+  976  hp -v
+  977  php -v
+  978  cd /usr/local/apache/bin
+  979  ./apachectl startssl
+  980  php -info|grep -i curl
+
+----------------------------
+
+Fixing New Server Name Server issues
+
+  159  cat /etc/nameserverips
+  160  vi /etc/wwwacct.conf
+  161  cat /etc/nameserverips
+  162  vi /etc/wwwacct.conf
+  163  vi /etc/nameserverips
+  164  cat /etc/nameserverips
+  165  vi /etc/REso7  /scripts/easyapache
+
+-----------------------------
+
+Output truncated to 2000 matches error in ftp
+
+pure-ftpd -L 10000:10
+
+10000 files and 10 levels of directories
+
+/etc/sysconfig/pure-ftpd
+
+-----------------------------
+
+Search files over a particular size
+
+find -name '*' -size +1000000k
+
+-----------------------------
