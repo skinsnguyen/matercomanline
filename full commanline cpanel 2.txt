@@ -1,3 +1,5 @@
+
+
 SWAP Creation 4GB
 ==================
   927  dd if=/dev/zero of=/usr/swap-file bs=4096 count=8192000
