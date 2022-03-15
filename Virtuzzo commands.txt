@@ -1,7 +1,7 @@
 Virtuzzo commands
 =========================================================================
 How to create an container in Virtuozoo
-vzctl create 7733(container ID) –hostname sachin.testserver.com –ipadd 192.168.20.251
+vzctl create 7733(container ID) –hostname sv.kiemtra.tk –ipadd 192.168.20.251
 =========================================================================
 How to enter a container
 vzctl enter Container ID
