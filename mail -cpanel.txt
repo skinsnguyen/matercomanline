@@ -1,3 +1,5 @@
+
+
 see al logs  ->1
 --------------
 cat /var/log/exim_mainlog | grep cwd | grep /home
